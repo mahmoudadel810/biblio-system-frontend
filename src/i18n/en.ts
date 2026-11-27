@@ -103,4 +103,9 @@ export const en: Record<string, string> = {
   'lib.status.verified': 'Verified',
   'lib.status.rejected': 'Rejected',
   'lib.status.suspended': 'Suspended',
+  'buy.title': 'Where to buy',
+  'buy.instock': 'In stock',
+  'buy.out': 'Out of stock',
+  'buy.go': 'Go to store',
+  'buy.note': 'You buy from the store directly. Biblio does not take payments.',
 };
