@@ -78,6 +78,8 @@ export const ar: Record<string, string> = {
   'borrow.err.limit': 'وصلت إلى الحد الأقصى للكتب المعارة في وقت واحد.',
   'borrow.err.queue': 'هذه النسخة محجوزة للأعضاء في الطابور.',
   'borrow.err.date': 'اختر تاريخًا من الغد حتى أقصى مدة إعارة.',
+  'my.useHijri': 'عرض التاريخ الهجري',
+  'my.useGregorian': 'عرض التاريخ الميلادي',
   'my.loans': 'إعاراتي',
   'my.noloans': 'لا توجد كتب معارة.',
   'my.overdue': 'متأخر',

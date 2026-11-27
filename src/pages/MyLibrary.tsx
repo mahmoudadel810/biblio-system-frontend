@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, ApiError } from '../api/client';
 import { useI18n } from '../i18n';
-import { fmtDate, fmtMoney } from '../public/format';
+import { fmtDate, fmtMoney, getCalendar, setCalendar } from '../public/format';
 import { reason } from '../public/BorrowDialog';
 
 interface MyLoan { id: string; book_slug: string | null; title: string; title_ar: string | null; due_at: string; returned_at: string | null; renewals_left: number; overdue: boolean }
@@ -34,10 +34,14 @@ export default function MyLibrary() {
   const cancel = async (id: string) => { await api.post(`/reservations/${id}/cancel`).catch(() => {}); load(); };
   const name = (x: { title: string; title_ar: string | null }) => (lang === 'ar' && x.title_ar ? x.title_ar : x.title);
   const open = loans.filter((l) => !l.returned_at);
+  const [cal, setCal] = useState(getCalendar());
   const total = fines.reduce((s, f) => s + f.amount, 0);
 
   return (
     <section className="mylib">
+      <button type="button" className="pill ghost" aria-pressed={cal === 'hijri'} onClick={() => { const n = cal === 'hijri' ? 'gregory' : 'hijri'; setCalendar(n); setCal(n); }}>
+        {t(cal === 'hijri' ? 'my.useGregorian' : 'my.useHijri')}
+      </button>
       <h2>{t('my.loans')}</h2>
       {open.length === 0 ? <p className="muted">{t('my.noloans')}</p> : (
         <ul className="mylist">

@@ -78,6 +78,8 @@ export const en: Record<string, string> = {
   'borrow.err.limit': 'You have reached the limit of books on loan at once.',
   'borrow.err.queue': 'This copy is reserved for members in the queue.',
   'borrow.err.date': 'Pick a date from tomorrow up to the maximum loan period.',
+  'my.useHijri': 'Show Hijri dates',
+  'my.useGregorian': 'Show Gregorian dates',
   'my.loans': 'My loans',
   'my.noloans': 'No books on loan.',
   'my.overdue': 'Overdue',
