@@ -97,6 +97,8 @@ export const ar: Record<string, string> = {
   'dir.libraries': 'المكتبات على بيبليو',
   'dir.bookstores': 'المتاجر على بيبليو',
   'dir.lead': 'كل جهة هنا راجعها مشرف.',
+  'dir.city': 'المدينة',
+  'dir.allCities': 'كل المدن',
   'dir.empty': 'لا توجد جهات بعد.',
   'lib.mine': 'طلباتك',
   'lib.status.pending': 'قيد المراجعة',

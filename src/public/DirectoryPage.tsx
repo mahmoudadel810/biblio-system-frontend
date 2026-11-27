@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useI18n } from '../i18n';
 import { useFetch, useTitle } from './hooks';
 
@@ -9,11 +10,23 @@ export default function DirectoryPage({ kind }: { kind: 'library' | 'bookstore' 
   const { data, loading, error } = useFetch<Org[]>('/organizations?per_page=100');
   const title = t(kind === 'library' ? 'dir.libraries' : 'dir.bookstores');
   useTitle(title);
-  const items = (data ?? []).filter((o) => o.kind === kind);
+  const [city, setCity] = useState('');
+  const ofKind = (data ?? []).filter((o) => o.kind === kind);
+  const cities = [...new Set(ofKind.map((o) => o.city).filter((c): c is string => !!c))].sort((a, b) => a.localeCompare(b));
+  const items = city ? ofKind.filter((o) => o.city === city) : ofKind;
   return (
     <section className="band">
       <h1>{title}</h1>
       <p className="muted">{t('dir.lead')}</p>
+      {cities.length > 1 && (
+        <label className="field-inline">
+          <span>{t('dir.city')}</span>
+          <select value={city} onChange={(e) => setCity(e.target.value)}>
+            <option value="">{t('dir.allCities')}</option>
+            {cities.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </label>
+      )}
       {loading && <p className="muted" role="status">{t('loading')}</p>}
       {error && <p className="error" role="alert">{error}</p>}
       {!loading && !error && items.length === 0 && <p className="muted">{t('dir.empty')}</p>}
