@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useI18n } from '../i18n';
+import { fmtDateTime } from '../public/format';
+import { useCalendar } from '../public/useCalendar';
 import { api } from '../api/client';
 import type { AuditLog } from '../api/types';
 
 export default function AuditPage() {
+  const { t, lang } = useI18n();
+  useCalendar();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [entityType, setEntityType] = useState('');
   const [error, setError] = useState('');
@@ -34,10 +39,10 @@ export default function AuditPage() {
 
   return (
     <div className="panel">
-      <h2>Audit log</h2>
+      <h2>{t('audit.title')}</h2>
       <form className="inline-form" onSubmit={(e) => e.preventDefault()}>
         <input
-          placeholder="Filter by entity type (e.g. fine, transfer)"
+          placeholder={t('audit.filter')}
           value={entityType}
           onChange={(e) => setEntityType(e.target.value)}
         />
@@ -45,28 +50,28 @@ export default function AuditPage() {
       <table>
         <thead>
           <tr>
-            <th>When</th>
-            <th>Action</th>
-            <th>Entity</th>
-            <th>Actor</th>
-            <th>Details</th>
+            <th>{t('col.when')}</th>
+            <th>{t('col.action')}</th>
+            <th>{t('col.entity')}</th>
+            <th>{t('col.actor')}</th>
+            <th>{t('col.details')}</th>
           </tr>
         </thead>
         <tbody>
           {logs.map((log) => (
             <tr key={log.id}>
-              <td>{new Date(log.created_at).toLocaleString()}</td>
+              <td>{fmtDateTime(log.created_at, lang)}</td>
               <td>{log.action}</td>
               <td>
                 {log.entity_type} <span className="muted">{log.entity_id}</span>
               </td>
-              <td className="muted">{log.actor_id ?? 'system'}</td>
+              <td className="muted">{log.actor_id ?? t('audit.system')}</td>
               <td className="muted">{JSON.stringify(log.details)}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      {more && <button type="button" className="pill ghost" onClick={loadMore}>Load more</button>}
+      {more && <button type="button" className="pill ghost" onClick={loadMore}>{t('more')}</button>}
     </div>
   );
 }

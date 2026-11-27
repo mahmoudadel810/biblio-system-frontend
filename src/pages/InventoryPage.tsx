@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useI18n } from '../i18n';
+import { fmtDateTime } from '../public/format';
+import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type { Adjustment, Branch, StockLevel } from '../api/types';
 
 export default function InventoryPage() {
+  const { lang } = useI18n();
+  useCalendar();
   const [stock, setStock] = useState<StockLevel[]>([]);
   const [adjustments, setAdjustments] = useState<Adjustment[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -135,7 +140,7 @@ export default function InventoryPage() {
           <tbody>
             {adjustments.map((a) => (
               <tr key={a.id}>
-                <td>{new Date(a.created_at).toLocaleString()}</td>
+                <td>{fmtDateTime(a.created_at, lang)}</td>
                 <td className="muted">{a.copy_id}</td>
                 <td>{a.from_status}</td>
                 <td>{a.to_status}</td>

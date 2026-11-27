@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useI18n } from '../i18n';
+import { fmtDate } from '../public/format';
+import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type {
   Branch,
@@ -8,6 +11,8 @@ import type {
 import { useAuth } from '../auth/AuthContext';
 
 export default function ProcurementPage() {
+  const { lang } = useI18n();
+  useCalendar();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -236,7 +241,7 @@ export default function ProcurementPage() {
                 <td>
                   <span className="badge">{o.status}</span>
                 </td>
-                <td>{new Date(o.created_at).toLocaleDateString()}</td>
+                <td>{fmtDate(o.created_at, lang)}</td>
                 <td>
                   {o.status === 'draft' && (
                     <>
