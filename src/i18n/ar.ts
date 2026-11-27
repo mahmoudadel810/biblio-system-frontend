@@ -482,4 +482,7 @@ export const ar: Record<string, string> = {
   'account.cancel': "إلغاء",
   'account.failed': "حدث خطأ. حاول مرة أخرى.",
   'nav.account': "الحساب",
+  'notfound.title': "الصفحة غير موجودة",
+  'notfound.body': "ربما الرابط قديم أو مكتوب بشكل خاطئ.",
+  'notfound.home': "الصفحة الرئيسية",
 };

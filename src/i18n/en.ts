@@ -482,4 +482,7 @@ export const en: Record<string, string> = {
   'account.cancel': "Cancel",
   'account.failed': "Something went wrong. Try again.",
   'nav.account': "Account",
+  'notfound.title': "Page not found",
+  'notfound.body': "The link may be old or mistyped.",
+  'notfound.home': "Go home",
 };

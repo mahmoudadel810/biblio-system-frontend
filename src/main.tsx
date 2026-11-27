@@ -1,3 +1,4 @@
+import ErrorBoundary from './components/ErrorBoundary';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -18,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <I18nProvider>
         <AuthProvider>
-          <App />
+          <ErrorBoundary><App /></ErrorBoundary>
         </AuthProvider>
       </I18nProvider>
     </BrowserRouter>

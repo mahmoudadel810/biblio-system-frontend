@@ -66,7 +66,7 @@ export default function AuditPage() {
                 {log.entity_type}{log.entity_id && <span className="muted"> #{log.entity_id.slice(0, 8)}</span>}
               </td>
               <td>{log.actor_name ?? t('audit.system')}</td>
-              <td className="muted">{JSON.stringify(log.details)}</td>
+              <td className="muted">{Object.entries(log.details ?? {}).map(([k, v]) => `${k.replace(/_/g, ' ')}: ${typeof v === 'object' ? JSON.stringify(v) : String(v)}`).join(' · ')}</td>
             </tr>
           ))}
         </tbody>

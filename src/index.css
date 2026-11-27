@@ -293,3 +293,4 @@ form.inline-form {
 .account-page button.danger { background: var(--danger); color: #fff; border-color: var(--danger); }
 .account-page .danger-zone { border-color: var(--danger); }
 .topbar-user a { color: inherit; text-decoration: none; }
+.page-message h1 { color: var(--text); }

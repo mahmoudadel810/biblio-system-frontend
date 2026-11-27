@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import PublicLayout from './public/PublicLayout';
 import HomePage from './public/HomePage';
 import BooksPage from './public/BooksPage';
@@ -32,6 +32,7 @@ const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const OrgQueuePage = lazy(() => import('./pages/OrgQueuePage'));
 const TransfersPage = lazy(() => import('./pages/TransfersPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const AccountPage = lazy(() => import('./pages/AccountPage'));
 const ImportPage = lazy(() => import('./pages/ImportPage'));
 
@@ -175,7 +176,9 @@ export default function App() {
           }
         />
       </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route element={<PublicLayout />}>
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
     </Suspense>
     </>
