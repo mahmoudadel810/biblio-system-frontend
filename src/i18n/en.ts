@@ -485,4 +485,12 @@ export const en: Record<string, string> = {
   'notfound.title': "Page not found",
   'notfound.body': "The link may be old or mistyped.",
   'notfound.home': "Go home",
+  'auth.google': "Continue with Google",
+  'auth.or': "or",
+  'auth.google.denied': "Google sign-in was cancelled.",
+  'auth.google.invalid': "Google sign-in could not be completed. Please try again.",
+  'auth.google.expired': "The sign-in took too long. Please try again.",
+  'auth.google.exchange': "Google did not confirm the sign-in. Please try again.",
+  'auth.google.unverified': "Your Google email is not verified, so it cannot be used here.",
+  'auth.google.disabled': "This account is disabled. Contact the library.",
 };

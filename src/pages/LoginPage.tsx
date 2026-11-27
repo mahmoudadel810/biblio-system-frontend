@@ -5,6 +5,7 @@ import { useAuth } from '../auth/AuthContext';
 import { ApiError } from '../api/client';
 import { useI18n } from '../i18n';
 import AuthLang from '../components/AuthLang';
+import GoogleButton from '../components/GoogleButton';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const gReason = new URLSearchParams(location.search).get('google') === 'failed' ? new URLSearchParams(location.search).get('reason') : null;
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -36,6 +38,8 @@ export default function LoginPage() {
     <div className="auth-card">
       <AuthLang />
       <h1>{t('auth.signinTitle')}</h1>
+      {gReason && <p className="error-text" role="alert">{t(`auth.google.${gReason}`) === `auth.google.${gReason}` ? t('auth.google.invalid') : t(`auth.google.${gReason}`)}</p>}
+      <GoogleButton />
       <form onSubmit={onSubmit}>
         <input
           type="email"

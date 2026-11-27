@@ -32,6 +32,7 @@ const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const OrgQueuePage = lazy(() => import('./pages/OrgQueuePage'));
 const TransfersPage = lazy(() => import('./pages/TransfersPage'));
+const GoogleCallbackPage = lazy(() => import('./pages/GoogleCallbackPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const AccountPage = lazy(() => import('./pages/AccountPage'));
 const ImportPage = lazy(() => import('./pages/ImportPage'));
@@ -74,6 +75,7 @@ export default function App() {
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/auth/google" element={<GoogleCallbackPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route
