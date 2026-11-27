@@ -3,9 +3,12 @@ import { safeNext } from '../auth/next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { ApiError } from '../api/client';
+import { useI18n } from '../i18n';
+import AuthLang from '../components/AuthLang';
 
 export default function RegisterPage() {
   const { register } = useAuth();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const location = useLocation();
   const [fullName, setFullName] = useState('');
@@ -22,7 +25,7 @@ export default function RegisterPage() {
       await register(email, password, fullName);
       navigate(safeNext(location.search), { replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'registration failed');
+      setError(err instanceof ApiError ? err.message : t('auth.regFail'));
     } finally {
       setBusy(false);
     }
@@ -30,24 +33,25 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-card">
-      <h1>Create your account</h1>
+      <AuthLang />
+      <h1>{t('auth.regTitle')}</h1>
       <form onSubmit={onSubmit}>
         <input
-          placeholder="Full name"
+          placeholder={t('auth.fullName')}
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           required
         />
         <input
           type="email"
-          placeholder="Email"
+          placeholder={t('auth.email')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
-          placeholder="Password (min 8 characters)"
+          placeholder={t('auth.passMin')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           minLength={8}
@@ -55,11 +59,11 @@ export default function RegisterPage() {
         />
         {error && <p className="error-text">{error}</p>}
         <button type="submit" disabled={busy}>
-          {busy ? 'Creating…' : 'Register'}
+          {busy ? t('auth.creating') : t('auth.register')}
         </button>
       </form>
       <p className="muted">
-        Already registered? <Link to={`/login${location.search}`}>Sign in</Link>
+        {t('auth.haveAccount')} <Link to={`/login${location.search}`}>{t('auth.signin')}</Link>
       </p>
     </div>
   );
