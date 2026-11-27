@@ -3,9 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { safeNext } from '../auth/next';
 import { useAuth } from '../auth/AuthContext';
 import { ApiError } from '../api/client';
+import { useI18n } from '../i18n';
+import AuthLang from '../components/AuthLang';
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState('');
@@ -23,7 +26,7 @@ export default function LoginPage() {
         ?.from?.pathname;
       navigate(from ?? safeNext(location.search), { replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'login failed');
+      setError(err instanceof ApiError ? err.message : t('auth.loginFail'));
     } finally {
       setBusy(false);
     }
@@ -31,30 +34,32 @@ export default function LoginPage() {
 
   return (
     <div className="auth-card">
-      <h1>Sign in to Biblio</h1>
+      <AuthLang />
+      <h1>{t('auth.signinTitle')}</h1>
       <form onSubmit={onSubmit}>
         <input
           type="email"
-          placeholder="Email"
+          placeholder={t('auth.email')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder={t('auth.password')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
         {error && <p className="error-text">{error}</p>}
         <button type="submit" disabled={busy}>
-          {busy ? 'Signing in…' : 'Sign in'}
+          {busy ? t('auth.signingIn') : t('auth.signin')}
         </button>
       </form>
       <p className="muted">
-        No account? <Link to="/register">Register</Link>
+        {t('auth.noAccount')} <Link to="/register">{t('auth.register')}</Link>
       </p>
+      <p className="muted"><Link to="/forgot-password">{t('auth.forgot')}</Link></p>
     </div>
   );
 }
