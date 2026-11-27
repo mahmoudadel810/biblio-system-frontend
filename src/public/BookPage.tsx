@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { BookTile, Cover } from './Cards';
 import BorrowDialog from './BorrowDialog';
 import WhereToBuy from './WhereToBuy';
+import { api, ApiError } from '../api/client';
 import type { BookDetail } from './api';
 
 export default function BookPage() {
@@ -16,6 +17,8 @@ export default function BookPage() {
   const navigate = useNavigate();
   const [dlg, setDlg] = useState(false);
   const location = useLocation();
+  const digital = useFetch<{ available: boolean; loan_days: number }>(`/books/${encodeURIComponent(slug ?? '')}/digital`);
+  const [readErr, setReadErr] = useState('');
   const { data: b, loading, error, status } = useFetch<BookDetail>(`/books/${encodeURIComponent(slug ?? '')}`);
   useTitle(b ? (ar && b.title_ar ? b.title_ar : b.title) : '');
   useReveal([b, lang]);
@@ -32,6 +35,13 @@ export default function BookPage() {
     if (!user) navigate(`/register?next=${encodeURIComponent(location.pathname)}&intent=borrow`);
     else setDlg(true);
   };
+  const read = async () => {
+    if (!user) return navigate(`/register?next=${encodeURIComponent(`/read/${b.slug}`)}&intent=read`);
+    setReadErr('');
+    try { await api.post('/digital-loans', { book_id: b.id }); navigate(`/read/${encodeURIComponent(b.slug)}`); }
+    catch (e) { setReadErr(e instanceof ApiError ? e.message : t('read.failed')); }
+  };
+  const hasDigital = digital.data?.available === true;
   const title = ar && b.title_ar ? b.title_ar : b.title;
   const desc = ar && b.description_ar ? b.description_ar : b.description;
   return (
@@ -60,9 +70,11 @@ export default function BookPage() {
         )}
         <div className="row">
           <button type="button" className="pill" onClick={borrow}>{t('book.borrow')}</button>
-          {b.is_public_domain && <button type="button" className="pill ghost" disabled aria-describedby="soon">{t('book.read')}</button>}
+          {hasDigital && <button type="button" className="pill ghost" onClick={read}>{t('book.read')}</button>}
         </div>
-        {b.is_public_domain && <p id="soon" className="muted small">{t('book.soon')}</p>}
+        {hasDigital && <p className="muted small">{t('read.loandays').replace('{n}', String(digital.data?.loan_days ?? ''))}</p>}
+        {readErr && <p className="error small" role="alert">{readErr}</p>}
+        {!hasDigital && !digital.loading && <p className="muted small">{t('read.nodigital')}</p>}
         {!user && <p className="muted small">{t('book.gate')}</p>}
         {b.availability.length > 0 && (
           <table className="avail">
