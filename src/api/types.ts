@@ -58,6 +58,14 @@ export type CopyStatus =
   | 'lost'
   | 'maintenance';
 
+export interface Copy {
+  id: string;
+  branch_id: string;
+  branch_name: string;
+  barcode: string;
+  status: CopyStatus;
+}
+
 export interface Loan {
   id: string;
   copy_id: string;
