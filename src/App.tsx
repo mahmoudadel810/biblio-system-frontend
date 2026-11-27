@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import PublicLayout from './public/PublicLayout';
 import HomePage from './public/HomePage';
@@ -5,25 +6,28 @@ import BooksPage from './public/BooksPage';
 import BookPage from './public/BookPage';
 import { AuthorsPage, AuthorPage } from './public/AuthorsPage';
 import LibraryStartPage from './public/LibraryStartPage';
-import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
-import AuditPage from './pages/AuditPage';
-import CatalogPage from './pages/CatalogPage';
-import DashboardPage from './pages/DashboardPage';
-import InventoryPage from './pages/InventoryPage';
-import LoansPage from './pages/LoansPage';
-import LoginPage from './pages/LoginPage';
-import MembersPage from './pages/MembersPage';
-import NotificationsPage from './pages/NotificationsPage';
-import PaymentsPage from './pages/PaymentsPage';
-import ProcurementPage from './pages/ProcurementPage';
-import RegisterPage from './pages/RegisterPage';
-import ReportsPage from './pages/ReportsPage';
-import SettingsPage from './pages/SettingsPage';
-import TransfersPage from './pages/TransfersPage';
+
+// Staff and account screens load on demand; the public site stays in the main chunk.
+const Layout = lazy(() => import('./components/Layout'));
+const AuditPage = lazy(() => import('./pages/AuditPage'));
+const CatalogPage = lazy(() => import('./pages/CatalogPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const InventoryPage = lazy(() => import('./pages/InventoryPage'));
+const LoansPage = lazy(() => import('./pages/LoansPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const MembersPage = lazy(() => import('./pages/MembersPage'));
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
+const PaymentsPage = lazy(() => import('./pages/PaymentsPage'));
+const ProcurementPage = lazy(() => import('./pages/ProcurementPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const ReportsPage = lazy(() => import('./pages/ReportsPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const TransfersPage = lazy(() => import('./pages/TransfersPage'));
 
 export default function App() {
   return (
+    <Suspense fallback={<p className="page-message" role="status">…</p>}>
     <Routes>
       <Route element={<PublicLayout />}>
         <Route path="/" element={<HomePage />} />
@@ -120,5 +124,6 @@ export default function App() {
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </Suspense>
   );
 }

@@ -3,7 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Biblio System</title>
+    <title>Biblio</title>
+    <meta name="description" content="Biblio: browse books and authors, borrow from verified libraries, read public-domain books. English and Arabic." />
+    <meta property="og:title" content="Biblio" />
+    <meta property="og:description" content="Browse books and authors, borrow from verified libraries, and read public-domain books." />
+    <meta property="og:type" content="website" />
+    <script>
+      // Set language and direction before first paint so Arabic does not flash left-to-right.
+      (function () {
+        try {
+          var q = new URLSearchParams(location.search).get('lang');
+          var saved = localStorage.getItem('biblio.lang');
+          var l = q === 'ar' || q === 'en' ? q : saved === 'ar' || saved === 'en' ? saved : (navigator.language || '').toLowerCase().indexOf('ar') === 0 ? 'ar' : 'en';
+          document.documentElement.lang = l;
+          document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
