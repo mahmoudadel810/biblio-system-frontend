@@ -265,7 +265,7 @@ form.inline-form {
 
 /* Narrow screens: panels scroll sideways instead of pushing the page wider, and forms wrap. */
 .content, .reader-content { min-width: 0; box-sizing: border-box; }
-.panel { overflow-x: auto; }
+.panel { overflow-x: auto; position: relative; }
 .inline-form { flex-wrap: wrap; }
 .inline-form input { min-width: 0; flex: 1 1 140px; }
 .topbar { box-sizing: border-box; max-width: 100vw; }
