@@ -313,3 +313,16 @@ form.inline-form {
 .member-card { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; margin: 12px 0; background: #fff; border: 1px solid var(--border); border-radius: 12px; max-width: 320px; }
 .member-card .qr { max-width: 100%; height: auto; }
 .ok-text { color: #1f7a4d; }
+
+/* Shelf labels. On screen the sheet is hidden; printing shows only the sheet. */
+.label-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.check-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+.label-sheet { display: none; }
+@media print {
+  .app-shell > header, .no-print, .reader-bar, nav { display: none !important; }
+  .app-shell, .content { padding: 0 !important; background: #fff !important; }
+  .label-sheet { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; }
+  .label { display: flex; gap: 3mm; align-items: center; padding: 3mm; border: 1px solid #000; break-inside: avoid; }
+  .label-text { display: flex; flex-direction: column; gap: 1mm; font-size: 9pt; min-width: 0; overflow-wrap: anywhere; }
+}
+.label .qr { flex: none; }
