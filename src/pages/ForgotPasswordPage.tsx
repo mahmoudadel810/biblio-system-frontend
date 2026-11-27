@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="auth-card">
+    <main className="auth-card">
       <AuthLang />
       <h1>{t('auth.forgotTitle')}</h1>
       {sent ? (
@@ -37,6 +37,6 @@ export default function ForgotPasswordPage() {
         </>
       )}
       <p className="muted"><Link to="/login">{t('auth.back')}</Link></p>
-    </div>
+    </main>
   );
 }

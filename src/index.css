@@ -300,3 +300,4 @@ form.inline-form {
 .google-btn:hover, .google-btn:focus-visible { border-color: var(--text); }
 .auth-or { display: flex; align-items: center; gap: 12px; margin: 14px 0; }
 .auth-or::before, .auth-or::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

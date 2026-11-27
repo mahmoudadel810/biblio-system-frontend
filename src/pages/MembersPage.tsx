@@ -60,7 +60,7 @@ export default function MembersPage() {
               <th>{t('common.email')}</th>
               <th>{t('common.role')}</th>
               <th>{t('common.status')}</th>
-              {isAdmin && <th></th>}
+              {isAdmin && <th><span className="sr-only">{t('col.actions')}</span></th>}
             </tr>
           </thead>
           <tbody>
@@ -71,6 +71,7 @@ export default function MembersPage() {
                 <td>
                   {isAdmin ? (
                     <select
+                      aria-label={`${t('common.role')} ${m.full_name}`}
                       value={m.role}
                       onChange={(e) =>
                         update(m.id, { role: e.target.value as Role })

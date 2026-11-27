@@ -128,7 +128,7 @@ export default function CatalogPage() {
               <th>{t('rep.isbn')}</th>
               <th>{t('cat.publisher')}</th>
               <th>{t('cat.year')}</th>
-              <th></th>
+              <th><span className="sr-only">{t('col.actions')}</span></th>
             </tr>
           </thead>
           <tbody>

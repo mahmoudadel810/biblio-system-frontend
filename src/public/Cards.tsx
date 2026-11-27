@@ -5,7 +5,7 @@ import type { BookCard, AuthorCard } from './api';
 
 const SCENES = [
   { bg: '#1f2a44', fg: '#f6f1e7', ac: '#e4572e' },
-  { bg: '#e4572e', fg: '#ffffff', ac: '#1f2a44' },
+  { bg: '#c4400f', fg: '#ffffff', ac: '#1f2a44' },
   { bg: '#2f7d5b', fg: '#f6f1e7', ac: '#f2c14e' },
   { bg: '#f2c14e', fg: '#1f2a44', ac: '#e4572e' },
 ];

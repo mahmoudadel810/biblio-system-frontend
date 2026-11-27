@@ -133,7 +133,7 @@ export default function ReportsPage() {
           <table>
             <thead>
               <tr>
-                <th></th>
+                <th><span className="sr-only">{t('col.actions')}</span></th>
                 <th>{t('rep.count')}</th>
                 <th>{t('rep.total')}</th>
               </tr>

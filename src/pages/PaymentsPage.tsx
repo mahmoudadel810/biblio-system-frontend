@@ -76,6 +76,7 @@ export default function PaymentsPage() {
         <h2>{t('pay.collect')}</h2>
         <form className="inline-form" onSubmit={collect}>
           <select
+            aria-label={t('pay.unpaid')}
             value={form.fineId}
             onChange={(e) => setForm({ ...form, fineId: e.target.value })}
             required
@@ -88,6 +89,7 @@ export default function PaymentsPage() {
             ))}
           </select>
           <select
+            aria-label={t('pay.method')}
             value={form.method}
             onChange={(e) => setForm({ ...form, method: e.target.value })}
           >

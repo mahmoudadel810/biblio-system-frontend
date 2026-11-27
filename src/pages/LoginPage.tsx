@@ -35,7 +35,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="auth-card">
+    <main className="auth-card">
       <AuthLang />
       <h1>{t('auth.signinTitle')}</h1>
       {gReason && <p className="error-text" role="alert">{t(`auth.google.${gReason}`) === `auth.google.${gReason}` ? t('auth.google.invalid') : t(`auth.google.${gReason}`)}</p>}
@@ -64,6 +64,6 @@ export default function LoginPage() {
         {t('auth.noAccount')} <Link to="/register">{t('auth.register')}</Link>
       </p>
       <p className="muted"><Link to="/forgot-password">{t('auth.forgot')}</Link></p>
-    </div>
+    </main>
   );
 }

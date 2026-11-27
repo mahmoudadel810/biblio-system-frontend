@@ -493,4 +493,8 @@ export const ar: Record<string, string> = {
   'auth.google.exchange': "لم تؤكد Google تسجيل الدخول. حاول مرة أخرى.",
   'auth.google.unverified': "بريدك في Google غير مؤكَّد، لذا لا يمكن استخدامه هنا.",
   'auth.google.disabled': "هذا الحساب معطّل. تواصل مع المكتبة.",
+  'po.pickBook': "ابحث عن كتاب بالعنوان أو ISBN",
+  'po.qty': "الكمية",
+  'po.unitCost': "تكلفة الوحدة (ر.س)",
+  'col.actions': "الإجراءات",
 };
