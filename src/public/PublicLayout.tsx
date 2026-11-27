@@ -47,7 +47,7 @@ export default function PublicLayout() {
       <main id="main"><Outlet /></main>
       <footer className="pub-foot">
         <span>Biblio</span>
-        <span>{t('footer.credit')}</span>
+        <span>{t('footer.credit')} <Link to="/credits">{t('credits.link')}</Link></span>
       </footer>
     </>
   );
