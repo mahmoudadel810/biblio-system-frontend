@@ -46,7 +46,9 @@ export function Cover({
   const [failed, setFailed] = useState(false);
   const a = book.authors[0];
   const author = a ? (lang === 'ar' && a.name_ar ? a.name_ar : a.name) : undefined;
-  const src = lang === 'ar' && book.cover_url_ar ? book.cover_url_ar : book.cover_url;
+  const base = lang === 'ar' && book.cover_url_ar ? book.cover_url_ar : book.cover_url;
+  // Larger variant for the hero and book page when we host one.
+  const src = base && eager && base.startsWith('/covers/') ? base.replace('.webp', '-lg.webp') : base;
   if (!src || failed) return <FallbackCover title={book.title} author={author} />;
   return (
     <img
