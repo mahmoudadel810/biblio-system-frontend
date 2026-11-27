@@ -56,6 +56,7 @@ export default function LibraryStartPage() {
               <li key={o.id}>
                 <div><bdi>{o.name}</bdi>{o.status_note && <div className="muted small"><bdi>{o.status_note}</bdi></div>}</div>
                 <span className={`status-badge ${o.status}`}>{t('lib.status.' + o.status)}</span>
+                {o.kind === 'bookstore' && o.status !== 'pending' && o.status !== 'rejected' && <Link className="pill ghost" to={`/store/${o.id}/listings`}>{t('store.manage')}</Link>}
               </li>
             ))}
           </ul>
