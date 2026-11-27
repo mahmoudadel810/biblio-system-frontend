@@ -103,4 +103,9 @@ export const ar: Record<string, string> = {
   'lib.status.verified': 'موثّقة',
   'lib.status.rejected': 'مرفوضة',
   'lib.status.suspended': 'موقوفة',
+  'buy.title': 'أين تشتريه',
+  'buy.instock': 'متوفر',
+  'buy.out': 'غير متوفر',
+  'buy.go': 'اذهب إلى المتجر',
+  'buy.note': 'تشتري من المتجر مباشرة. بيبليو لا يستقبل مدفوعات.',
 };

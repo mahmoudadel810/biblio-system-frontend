@@ -5,6 +5,7 @@ import { useFetch, useReveal, useTitle } from './hooks';
 import { useState } from 'react';
 import { BookTile, Cover } from './Cards';
 import BorrowDialog from './BorrowDialog';
+import WhereToBuy from './WhereToBuy';
 import type { BookDetail } from './api';
 
 export default function BookPage() {
@@ -73,6 +74,7 @@ export default function BookPage() {
             </tbody>
           </table>
         )}
+        <WhereToBuy slug={b.slug} />
         {b.quotes.length > 0 && (
           <>
             <h2>{t('book.quotes')}</h2>
