@@ -11,7 +11,7 @@ import type {
 import { useAuth } from '../auth/AuthContext';
 
 export default function ProcurementPage() {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   useCalendar();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
@@ -64,7 +64,7 @@ export default function ProcurementPage() {
       setSupplierForm({ name: '', email: '' });
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'could not add supplier');
+      setError(err instanceof ApiError ? err.message : t('po.supFail'));
     }
   };
 
@@ -84,11 +84,11 @@ export default function ProcurementPage() {
           },
         ],
       });
-      setMessage('Purchase order created.');
+      setMessage(t('po.created'));
       setOrderForm({ ...orderForm, bookId: '', quantity: 1, unitCost: '0.00' });
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'could not create order');
+      setError(err instanceof ApiError ? err.message : t('po.createFail'));
     }
   };
 
@@ -100,22 +100,22 @@ export default function ProcurementPage() {
       setMessage(ok);
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'action failed');
+      setError(err instanceof ApiError ? err.message : t('tr.actFail'));
     }
   };
 
   return (
     <>
       <div className="panel">
-        <h2>Suppliers</h2>
+        <h2>{t('po.suppliers')}</h2>
         {error && <p className="error-text">{error}</p>}
         {message && <p>{message}</p>}
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Active</th>
+              <th>{t('common.name')}</th>
+              <th>{t('common.email')}</th>
+              <th>{t('po.active')}</th>
             </tr>
           </thead>
           <tbody>
@@ -123,7 +123,7 @@ export default function ProcurementPage() {
               <tr key={s.id}>
                 <td>{s.name}</td>
                 <td>{s.email ?? '—'}</td>
-                <td>{s.active ? 'yes' : 'no'}</td>
+                <td>{s.active ? t('po.yes') : t('po.no')}</td>
               </tr>
             ))}
           </tbody>
@@ -131,7 +131,7 @@ export default function ProcurementPage() {
         {isAdmin && (
           <form className="inline-form" onSubmit={addSupplier}>
             <input
-              placeholder="Supplier name"
+              placeholder={t('po.supName')}
               value={supplierForm.name}
               onChange={(e) =>
                 setSupplierForm({ ...supplierForm, name: e.target.value })
@@ -140,19 +140,19 @@ export default function ProcurementPage() {
             />
             <input
               type="email"
-              placeholder="Email (optional)"
+              placeholder={t('po.emailOpt')}
               value={supplierForm.email}
               onChange={(e) =>
                 setSupplierForm({ ...supplierForm, email: e.target.value })
               }
             />
-            <button type="submit">Add supplier</button>
+            <button type="submit">{t('po.addSup')}</button>
           </form>
         )}
       </div>
 
       <div className="panel">
-        <h2>New purchase order</h2>
+        <h2>{t('po.new')}</h2>
         <form className="inline-form" onSubmit={addOrder}>
           <select
             value={orderForm.supplierId}
@@ -161,7 +161,7 @@ export default function ProcurementPage() {
             }
             required
           >
-            <option value="">Supplier</option>
+            <option value="">{t('po.supplier')}</option>
             {suppliers
               .filter((s) => s.active)
               .map((s) => (
@@ -177,7 +177,7 @@ export default function ProcurementPage() {
             }
             required
           >
-            <option value="">Branch</option>
+            <option value="">{t('po.branch')}</option>
             {branches
               .filter((b) => b.is_active)
               .map((b) => (
@@ -187,7 +187,7 @@ export default function ProcurementPage() {
               ))}
           </select>
           <input
-            placeholder="Book ID"
+            placeholder={t('po.bookId')}
             value={orderForm.bookId}
             onChange={(e) =>
               setOrderForm({ ...orderForm, bookId: e.target.value })
@@ -213,19 +213,19 @@ export default function ProcurementPage() {
             }
             required
           />
-          <button type="submit">Create order</button>
+          <button type="submit">{t('po.createBtn')}</button>
         </form>
       </div>
 
       <div className="panel">
-        <h2>Purchase orders</h2>
+        <h2>{t('po.orders')}</h2>
         <table>
           <thead>
             <tr>
-              <th>Supplier</th>
-              <th>Items</th>
-              <th>Status</th>
-              <th>Created</th>
+              <th>{t('po.supplier')}</th>
+              <th>{t('po.items')}</th>
+              <th>{t('common.status')}</th>
+              <th>{t('po.created2')}</th>
               <th></th>
             </tr>
           </thead>
@@ -239,7 +239,7 @@ export default function ProcurementPage() {
                     .join(', ')}
                 </td>
                 <td>
-                  <span className="badge">{o.status}</span>
+                  <span className="badge">{t(`po.s.${o.status}`)}</span>
                 </td>
                 <td>{fmtDate(o.created_at, lang)}</td>
                 <td>
@@ -248,16 +248,16 @@ export default function ProcurementPage() {
                       <button
                         type="button"
                         className="secondary"
-                        onClick={() => act(o.id, 'order', 'Marked ordered.')}
+                        onClick={() => act(o.id, 'order', t('po.marked'))}
                       >
-                        Order
+                        {t('po.order')}
                       </button>{' '}
                       <button
                         type="button"
                         className="danger"
-                        onClick={() => act(o.id, 'cancel', 'Cancelled.')}
+                        onClick={() => act(o.id, 'cancel', t('po.cancelled'))}
                       >
-                        Cancel
+                        {t('po.cancel')}
                       </button>
                     </>
                   )}
@@ -266,16 +266,16 @@ export default function ProcurementPage() {
                       <button
                         type="button"
                         className="secondary"
-                        onClick={() => act(o.id, 'receive', 'Received.')}
+                        onClick={() => act(o.id, 'receive', t('po.received'))}
                       >
-                        Receive
+                        {t('po.receive')}
                       </button>{' '}
                       <button
                         type="button"
                         className="danger"
-                        onClick={() => act(o.id, 'cancel', 'Cancelled.')}
+                        onClick={() => act(o.id, 'cancel', t('po.cancelled'))}
                       >
-                        Cancel
+                        {t('po.cancel')}
                       </button>
                     </>
                   )}
