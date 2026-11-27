@@ -424,4 +424,5 @@ export const ar: Record<string, string> = {
   'imp.s.ok': "جديد",
   'imp.s.exists': "موجود",
   'imp.s.invalid': "غير صالح",
+  'pwa.install': "تثبيت التطبيق",
 };

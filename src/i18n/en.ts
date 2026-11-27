@@ -424,4 +424,5 @@ export const en: Record<string, string> = {
   'imp.s.ok': "new",
   'imp.s.exists': "exists",
   'imp.s.invalid': "invalid",
+  'pwa.install': "Install app",
 };
