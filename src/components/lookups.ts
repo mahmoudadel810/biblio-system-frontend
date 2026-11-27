@@ -14,3 +14,8 @@ export const findBooks = (q: string): Promise<PickItem[]> =>
   api
     .get<Book[]>(`/books?q=${encodeURIComponent(q)}`)
     .then((r) => r.slice(0, 20).map((b) => ({ id: b.id, title: b.title, sub: b.isbn || undefined })));
+
+export const findMembers = (q: string): Promise<PickItem[]> =>
+  api
+    .get<{ id: string; full_name: string; email: string }[]>(`/members?q=${encodeURIComponent(q)}`)
+    .then((r) => r.map((m) => ({ id: m.id, title: m.full_name, sub: m.email })));

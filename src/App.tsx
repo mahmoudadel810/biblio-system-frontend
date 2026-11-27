@@ -19,6 +19,7 @@ const AuditPage = lazy(() => import('./pages/AuditPage'));
 const CatalogPage = lazy(() => import('./pages/CatalogPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const InventoryPage = lazy(() => import('./pages/InventoryPage'));
+const DeskPage = lazy(() => import('./pages/DeskPage'));
 const LoansPage = lazy(() => import('./pages/LoansPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
@@ -94,6 +95,14 @@ export default function App() {
           element={
             <ProtectedRoute role="librarian">
               <LoansPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/desk"
+          element={
+            <ProtectedRoute role="librarian">
+              <DeskPage />
             </ProtectedRoute>
           }
         />

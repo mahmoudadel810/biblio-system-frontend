@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useI18n } from '../i18n';
+import { useEffect } from 'react';
+import QrCode from '../components/QrCode';
 import { api, ApiError, clearTokens, request } from '../api/client';
 
 // Self-service account safety: change password, sign out everywhere, download my data, delete my account.
@@ -11,6 +13,21 @@ export default function AccountPage() {
   const [err, setErr] = useState('');
   const [delPw, setDelPw] = useState('');
   const [confirmDel, setConfirmDel] = useState(false);
+
+  const [card, setCard] = useState<{ code: string; full_name: string; expires_in: number } | null>(null);
+  const [showCard, setShowCard] = useState(false);
+  useEffect(() => {
+    if (!showCard) return;
+    let live = true;
+    const load = () =>
+      api.get<{ code: string; full_name: string; expires_in: number }>('/me/card').then((c) => live && setCard(c)).catch(() => {});
+    load();
+    const id = window.setInterval(load, 90000);
+    return () => {
+      live = false;
+      window.clearInterval(id);
+    };
+  }, [showCard]);
 
   const fail = (e: unknown) => setErr(e instanceof ApiError ? e.message : t('account.failed'));
   const leave = () => {
@@ -69,6 +86,21 @@ export default function AccountPage() {
       <h1>{t('account.title')}</h1>
       {msg && <p role="status">{msg}</p>}
       {err && <p className="error-text" role="alert">{err}</p>}
+
+      <section className="panel card-panel">
+        <h2>{t('card.title')}</h2>
+        <p className="muted">{t('card.hint')}</p>
+        {showCard && card ? (
+          <div className="member-card">
+            <QrCode value={card.code} label={t('card.qrLabel')} />
+            <strong>{card.full_name}</strong>
+            <span className="muted">{t('card.refresh')}</span>
+          </div>
+        ) : null}
+        <button type="button" className="pill ghost" onClick={() => { setShowCard(!showCard); setCard(null); }}>
+          {showCard ? t('card.hide') : t('card.show')}
+        </button>
+      </section>
 
       <section className="panel">
         <h2>{t('account.password')}</h2>

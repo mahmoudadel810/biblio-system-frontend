@@ -20,7 +20,7 @@ export default function Layout() {
 
   const titleKeys: Record<string, string> = {
     '/app': isStaff ? 'staff.nav.dashboard' : 'reader.mylib', '/catalog': 'staff.nav.catalog', '/notifications': 'reader.notes',
-    '/loans': 'staff.nav.loans', '/members': 'staff.nav.members', '/transfers': 'staff.nav.transfers',
+    '/loans': 'staff.nav.loans', '/desk': 'staff.nav.desk', '/members': 'staff.nav.members', '/transfers': 'staff.nav.transfers',
     '/procurement': 'staff.nav.procurement', '/inventory': 'staff.nav.inventory', '/import': 'staff.nav.import',
     '/payments': 'staff.nav.payments', '/reports': 'staff.nav.reports', '/settings': 'staff.nav.settings',
     '/organizations': 'staff.nav.orgs', '/audit': 'staff.nav.audit', '/account': 'nav.account',
@@ -67,6 +67,7 @@ export default function Layout() {
           <NavLink to="/app">{t('staff.nav.dashboard')}</NavLink>
           <NavLink to="/catalog">{t('staff.nav.catalog')}</NavLink>
           <NavLink to="/notifications">{t('reader.notes')}{badge}</NavLink>
+          {isStaff && <NavLink to="/desk">{t('staff.nav.desk')}</NavLink>}
           {isStaff && <NavLink to="/loans">{t('staff.nav.loans')}</NavLink>}
           {isStaff && <NavLink to="/members">{t('staff.nav.members')}</NavLink>}
           {isStaff && <NavLink to="/transfers">{t('staff.nav.transfers')}</NavLink>}
