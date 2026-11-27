@@ -97,6 +97,8 @@ export const en: Record<string, string> = {
   'dir.libraries': 'Libraries on Biblio',
   'dir.bookstores': 'Bookstores on Biblio',
   'dir.lead': 'Every organization here was checked by an admin.',
+  'dir.city': 'City',
+  'dir.allCities': 'All cities',
   'dir.empty': 'None listed yet.',
   'lib.mine': 'Your applications',
   'lib.status.pending': 'Pending review',
