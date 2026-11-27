@@ -4,6 +4,7 @@ import { useI18n } from '../i18n';
 import Logo from './Logo';
 import { useCalendar } from '../public/useCalendar';
 import { useUnread } from './useUnread';
+import { useInstall } from './useInstall';
 
 export default function Layout() {
   const { user, logout } = useAuth();
@@ -13,6 +14,7 @@ export default function Layout() {
   const { t, lang, setLang } = useI18n();
   const [cal, toggleCal] = useCalendar();
   const unread = useUnread(!!user);
+  const { canInstall, install } = useInstall();
   const badge = unread > 0 ? <span className="nav-badge" aria-label={`${unread}`}>{unread > 99 ? '99+' : unread}</span> : null;
 
   const onLogout = async () => {
@@ -33,6 +35,7 @@ export default function Layout() {
           </nav>
           <div className="reader-user">
             <button type="button" className="pill ghost" onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>{t('lang.switch')}</button>
+            {canInstall && <button type="button" className="pill" onClick={install}>{t('pwa.install')}</button>}
             <span className="reader-name">{user?.fullName || ''}</span>
             <button type="button" className="pill ghost" onClick={onLogout}>{t('reader.logout')}</button>
           </div>

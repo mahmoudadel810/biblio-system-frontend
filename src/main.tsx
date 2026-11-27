@@ -8,6 +8,11 @@ import './design/tokens.css';
 import './public/public.css';
 import { I18nProvider } from './i18n';
 
+// Offline-capable app shell. Production builds only, so the dev server is never cached.
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
