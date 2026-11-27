@@ -30,13 +30,14 @@ const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const OrgQueuePage = lazy(() => import('./pages/OrgQueuePage'));
 const TransfersPage = lazy(() => import('./pages/TransfersPage'));
+const ImportPage = lazy(() => import('./pages/ImportPage'));
 
 // Staff and account screens have no page-level title hook; give each route a title.
 const ROUTE_TITLES: Record<string, string> = {
   '/login': 'Sign in', '/register': 'Create account', '/app': 'My library', '/catalog': 'Catalog',
   '/notifications': 'Notifications', '/loans': 'Loans', '/members': 'Members', '/transfers': 'Transfers',
   '/procurement': 'Procurement', '/inventory': 'Inventory', '/payments': 'Payments', '/reports': 'Reports',
-  '/settings': 'Settings', '/organizations': 'Organizations', '/audit': 'Audit log',
+  '/import': 'Import', '/settings': 'Settings', '/organizations': 'Organizations', '/audit': 'Audit log',
 };
 function RouteTitle() {
   const { pathname } = useLocation();
@@ -108,6 +109,14 @@ export default function App() {
           element={
             <ProtectedRoute role="librarian">
               <ProcurementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/import"
+          element={
+            <ProtectedRoute role="librarian">
+              <ImportPage />
             </ProtectedRoute>
           }
         />
