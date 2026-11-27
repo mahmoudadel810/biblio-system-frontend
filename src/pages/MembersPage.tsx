@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { api, ApiError } from '../api/client';
 import type { Branch, Member, Role } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
+import { useI18n } from '../i18n';
 
 export default function MembersPage() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const isAdmin = user?.role === 'admin';
   const [members, setMembers] = useState<Member[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -30,7 +32,7 @@ export default function MembersPage() {
       await api.patch(`/members/${id}`, patch);
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'update failed');
+      setError(err instanceof ApiError ? err.message : t('mem.updFail'));
     }
   };
 
@@ -42,22 +44,22 @@ export default function MembersPage() {
       setBranchForm({ name: '', address: '' });
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'could not add branch');
+      setError(err instanceof ApiError ? err.message : t('mem.branchFail'));
     }
   };
 
   return (
     <>
       <div className="panel">
-        <h2>Members</h2>
+        <h2>{t('mem.title')}</h2>
         {error && <p className="error-text">{error}</p>}
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
+              <th>{t('common.name')}</th>
+              <th>{t('common.email')}</th>
+              <th>{t('common.role')}</th>
+              <th>{t('common.status')}</th>
               {isAdmin && <th></th>}
             </tr>
           </thead>
@@ -74,19 +76,19 @@ export default function MembersPage() {
                         update(m.id, { role: e.target.value as Role })
                       }
                     >
-                      <option value="member">member</option>
-                      <option value="librarian">librarian</option>
-                      <option value="admin">admin</option>
+                      <option value="member">{t('role.member')}</option>
+                      <option value="librarian">{t('role.librarian')}</option>
+                      <option value="admin">{t('role.admin')}</option>
                     </select>
                   ) : (
-                    m.role
+                    t(`role.${m.role}`)
                   )}
                 </td>
                 <td>
                   {m.is_active ? (
-                    <span className="badge ok">active</span>
+                    <span className="badge ok">{t('common.active')}</span>
                   ) : (
-                    <span className="badge warn">inactive</span>
+                    <span className="badge warn">{t('common.inactive')}</span>
                   )}
                 </td>
                 {isAdmin && (
@@ -96,7 +98,7 @@ export default function MembersPage() {
                       className={m.is_active ? 'danger' : 'secondary'}
                       onClick={() => update(m.id, { is_active: !m.is_active })}
                     >
-                      {m.is_active ? 'Deactivate' : 'Activate'}
+                      {m.is_active ? t('mem.deactivate') : t('mem.activate')}
                     </button>
                   </td>
                 )}
@@ -107,13 +109,13 @@ export default function MembersPage() {
       </div>
 
       <div className="panel">
-        <h2>Branches</h2>
+        <h2>{t('mem.branches')}</h2>
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Address</th>
-              <th>Status</th>
+              <th>{t('common.name')}</th>
+              <th>{t('common.address')}</th>
+              <th>{t('common.status')}</th>
             </tr>
           </thead>
           <tbody>
@@ -121,7 +123,7 @@ export default function MembersPage() {
               <tr key={b.id}>
                 <td>{b.name}</td>
                 <td>{b.address}</td>
-                <td>{b.is_active ? 'active' : 'inactive'}</td>
+                <td>{b.is_active ? t('common.active') : t('common.inactive')}</td>
               </tr>
             ))}
           </tbody>
@@ -129,7 +131,7 @@ export default function MembersPage() {
         {isAdmin && (
           <form className="inline-form" onSubmit={addBranch}>
             <input
-              placeholder="Branch name"
+              placeholder={t('mem.branchName')}
               value={branchForm.name}
               onChange={(e) =>
                 setBranchForm({ ...branchForm, name: e.target.value })
@@ -137,14 +139,14 @@ export default function MembersPage() {
               required
             />
             <input
-              placeholder="Address"
+              placeholder={t('common.address')}
               value={branchForm.address}
               onChange={(e) =>
                 setBranchForm({ ...branchForm, address: e.target.value })
               }
               required
             />
-            <button type="submit">Add branch</button>
+            <button type="submit">{t('mem.addBranch')}</button>
           </form>
         )}
       </div>

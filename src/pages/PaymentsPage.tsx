@@ -6,7 +6,7 @@ import { api, ApiError } from '../api/client';
 import type { Fine, Payment, PaymentSummary } from '../api/types';
 
 export default function PaymentsPage() {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   useCalendar();
   const [payments, setPayments] = useState<Payment[]>([]);
   const [summary, setSummary] = useState<PaymentSummary | null>(null);
@@ -42,10 +42,10 @@ export default function PaymentsPage() {
         method: form.method,
       });
       setForm({ fineId: '', method: 'cash' });
-      setMessage('Payment recorded.');
+      setMessage(t('pay.saved'));
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'payment failed');
+      setError(err instanceof ApiError ? err.message : t('pay.failed'));
     }
   };
 
@@ -55,17 +55,17 @@ export default function PaymentsPage() {
         <div className="stat-grid">
           <div className="stat-card">
             <div className="value">{summary.collected.toFixed(2)}</div>
-            <div className="label">Collected (last {summary.days} days)</div>
+            <div className="label">{t('pay.collected').replace('{n}', String(summary.days))}</div>
           </div>
           <div className="stat-card">
             <div className="value">{summary.payments}</div>
-            <div className="label">Payments</div>
+            <div className="label">{t('pay.count')}</div>
           </div>
           {summary.by_method.map((m) => (
             <div className="stat-card" key={m.method}>
               <div className="value">{m.total.toFixed(2)}</div>
               <div className="label">
-                {m.method} ({m.payments})
+                {t(`common.${m.method}`)} ({m.payments})
               </div>
             </div>
           ))}
@@ -73,14 +73,14 @@ export default function PaymentsPage() {
       )}
 
       <div className="panel">
-        <h2>Collect a fine payment</h2>
+        <h2>{t('pay.collect')}</h2>
         <form className="inline-form" onSubmit={collect}>
           <select
             value={form.fineId}
             onChange={(e) => setForm({ ...form, fineId: e.target.value })}
             required
           >
-            <option value="">Unpaid fine</option>
+            <option value="">{t('pay.unpaid')}</option>
             {unpaid.map((f) => (
               <option key={f.id} value={f.id}>
                 {f.amount.toFixed(2)} - {f.reason}
@@ -91,25 +91,25 @@ export default function PaymentsPage() {
             value={form.method}
             onChange={(e) => setForm({ ...form, method: e.target.value })}
           >
-            <option value="cash">cash</option>
-            <option value="card">card</option>
-            <option value="transfer">transfer</option>
+            <option value="cash">{t('common.cash')}</option>
+            <option value="card">{t('common.card')}</option>
+            <option value="transfer">{t('common.transfer')}</option>
           </select>
-          <button type="submit">Record payment</button>
+          <button type="submit">{t('pay.record')}</button>
         </form>
         {message && <p>{message}</p>}
         {error && <p className="error-text">{error}</p>}
       </div>
 
       <div className="panel">
-        <h2>Payment ledger</h2>
+        <h2>{t('pay.ledger')}</h2>
         <table>
           <thead>
             <tr>
-              <th>When</th>
-              <th>Member</th>
-              <th>Amount</th>
-              <th>Method</th>
+              <th>{t('pay.when')}</th>
+              <th>{t('pay.member')}</th>
+              <th>{t('pay.amount')}</th>
+              <th>{t('pay.method')}</th>
             </tr>
           </thead>
           <tbody>
@@ -118,7 +118,7 @@ export default function PaymentsPage() {
                 <td>{fmtDateTime(p.created_at, lang)}</td>
                 <td className="muted">{p.member_id}</td>
                 <td>{p.amount.toFixed(2)}</td>
-                <td>{p.method}</td>
+                <td>{t(`common.${p.method}`)}</td>
               </tr>
             ))}
           </tbody>
