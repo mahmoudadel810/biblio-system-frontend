@@ -270,3 +270,6 @@ form.inline-form {
 .inline-form input { min-width: 0; flex: 1 1 140px; }
 .topbar { box-sizing: border-box; max-width: 100vw; }
 @media (max-width: 600px) { .content { padding: 12px; } .topbar-user { flex-wrap: wrap; } }
+
+/* Unread badge on the Notifications link. Flat colour, no motion. */
+.nav-badge { display: inline-block; min-width: 1.35em; margin-inline-start: .4em; padding: 0 .4em; border-radius: 999px; background: #c0392b; color: #fff; font-size: .75rem; font-weight: 700; line-height: 1.5; text-align: center; }
