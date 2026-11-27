@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useI18n } from '../i18n';
+import { fmtDate } from '../public/format';
+import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type { Branch, Transfer } from '../api/types';
 
 export default function TransfersPage() {
+  const { lang } = useI18n();
+  useCalendar();
   const [transfers, setTransfers] = useState<Transfer[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
   const [form, setForm] = useState({ copyId: '', toBranchId: '' });
@@ -111,7 +116,7 @@ export default function TransfersPage() {
                     {t.status}
                   </span>
                 </td>
-                <td>{new Date(t.created_at).toLocaleDateString()}</td>
+                <td>{fmtDate(t.created_at, lang)}</td>
                 <td>
                   {t.status === 'in_transit' && (
                     <>

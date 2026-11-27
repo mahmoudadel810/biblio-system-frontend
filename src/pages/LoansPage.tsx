@@ -1,10 +1,15 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useI18n } from '../i18n';
+import { fmtDate } from '../public/format';
+import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type { Fine, Loan } from '../api/types';
 
 // Staff desk: borrow by copy barcode, return and renew loans, and collect
 // fine payments through the fines endpoint.
 export default function LoansPage() {
+  const { t, lang } = useI18n();
+  useCalendar();
   const [loans, setLoans] = useState<Loan[]>([]);
   const [fines, setFines] = useState<Fine[]>([]);
   const [memberFilter, setMemberFilter] = useState('');
@@ -50,7 +55,7 @@ export default function LoansPage() {
         member_id: borrowForm.memberId,
       });
       setBorrowForm({ copyId: '', memberId: '' });
-      setMessage('Loan created.');
+      setMessage(t('loans.created'));
       load();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'borrow failed');
@@ -72,10 +77,10 @@ export default function LoansPage() {
   return (
     <>
       <div className="panel">
-        <h2>Borrow a copy</h2>
+        <h2>{t('loans.borrowTitle')}</h2>
         <form className="inline-form" onSubmit={borrow}>
           <input
-            placeholder="Copy ID"
+            placeholder={t('loans.copyId')}
             value={borrowForm.copyId}
             onChange={(e) =>
               setBorrowForm({ ...borrowForm, copyId: e.target.value })
@@ -83,24 +88,24 @@ export default function LoansPage() {
             required
           />
           <input
-            placeholder="Member ID"
+            placeholder={t('loans.memberId')}
             value={borrowForm.memberId}
             onChange={(e) =>
               setBorrowForm({ ...borrowForm, memberId: e.target.value })
             }
             required
           />
-          <button type="submit">Borrow</button>
+          <button type="submit">{t('loans.borrow')}</button>
         </form>
         {message && <p>{message}</p>}
         {error && <p className="error-text">{error}</p>}
       </div>
 
       <div className="panel">
-        <h2>Loans</h2>
+        <h2>{t('staff.nav.loans')}</h2>
         <form className="inline-form" onSubmit={(e) => e.preventDefault()}>
           <input
-            placeholder="Filter by member ID"
+            placeholder={t('loans.filter')}
             value={memberFilter}
             onChange={(e) => setMemberFilter(e.target.value)}
           />
@@ -108,11 +113,11 @@ export default function LoansPage() {
         <table>
           <thead>
             <tr>
-              <th>Copy</th>
-              <th>Member</th>
-              <th>Borrowed</th>
-              <th>Due</th>
-              <th>Renewals</th>
+              <th>{t('col.copy')}</th>
+              <th>{t('col.member')}</th>
+              <th>{t('col.borrowed')}</th>
+              <th>{t('col.due')}</th>
+              <th>{t('col.renewals')}</th>
               <th></th>
             </tr>
           </thead>
@@ -121,36 +126,36 @@ export default function LoansPage() {
               <tr key={loan.id}>
                 <td className="muted">{loan.copy_id}</td>
                 <td className="muted">{loan.member_id}</td>
-                <td>{new Date(loan.borrowed_at).toLocaleDateString()}</td>
+                <td>{fmtDate(loan.borrowed_at, lang)}</td>
                 <td>
-                  {new Date(loan.due_at).toLocaleDateString()}{' '}
+                  {fmtDate(loan.due_at, lang)}{' '}
                   {!loan.returned_at && new Date(loan.due_at) < new Date() && (
-                    <span className="badge warn">overdue</span>
+                    <span className="badge warn">{t('loans.overdue')}</span>
                   )}
                 </td>
                 <td>{loan.renewed_count}</td>
                 <td>
                   {loan.returned_at ? (
-                    <span className="badge">returned</span>
+                    <span className="badge">{t('loans.returned')}</span>
                   ) : (
                     <>
                       <button
                         type="button"
                         className="secondary"
                         onClick={() =>
-                          act(`/loans/${loan.id}/return`, 'Returned.')
+                          act(`/loans/${loan.id}/return`, t('loans.doneReturn'))
                         }
                       >
-                        Return
+                        {t('loans.return')}
                       </button>{' '}
                       <button
                         type="button"
                         className="secondary"
                         onClick={() =>
-                          act(`/loans/${loan.id}/renew`, 'Renewed.')
+                          act(`/loans/${loan.id}/renew`, t('loans.doneRenew'))
                         }
                       >
-                        Renew
+                        {t('loans.renew')}
                       </button>
                     </>
                   )}
@@ -159,20 +164,20 @@ export default function LoansPage() {
             ))}
           </tbody>
         </table>
-        {more && <button type="button" className="pill ghost" onClick={loadMore}>Load more</button>}
+        {more && <button type="button" className="pill ghost" onClick={loadMore}>{t('more')}</button>}
       </div>
 
       <div className="panel">
-        <h2>Unpaid fines</h2>
+        <h2>{t('fines.title')}</h2>
         {fines.length === 0 ? (
-          <p className="muted">No unpaid fines.</p>
+          <p className="muted">{t('fines.none')}</p>
         ) : (
           <table>
             <thead>
               <tr>
-                <th>Member</th>
-                <th>Amount</th>
-                <th>Reason</th>
+                <th>{t('col.member')}</th>
+                <th>{t('col.amount')}</th>
+                <th>{t('col.reason')}</th>
                 <th></th>
               </tr>
             </thead>
@@ -187,10 +192,10 @@ export default function LoansPage() {
                       type="button"
                       className="secondary"
                       onClick={() =>
-                        act(`/fines/${fine.id}/pay`, 'Fine marked paid.')
+                        act(`/fines/${fine.id}/pay`, t('fines.done'))
                       }
                     >
-                      Mark paid
+                      {t('fines.pay')}
                     </button>
                   </td>
                 </tr>

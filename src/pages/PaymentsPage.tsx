@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useI18n } from '../i18n';
+import { fmtDateTime } from '../public/format';
+import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type { Fine, Payment, PaymentSummary } from '../api/types';
 
 export default function PaymentsPage() {
+  const { lang } = useI18n();
+  useCalendar();
   const [payments, setPayments] = useState<Payment[]>([]);
   const [summary, setSummary] = useState<PaymentSummary | null>(null);
   const [unpaid, setUnpaid] = useState<Fine[]>([]);
@@ -110,7 +115,7 @@ export default function PaymentsPage() {
           <tbody>
             {payments.map((p) => (
               <tr key={p.id}>
-                <td>{new Date(p.created_at).toLocaleString()}</td>
+                <td>{fmtDateTime(p.created_at, lang)}</td>
                 <td className="muted">{p.member_id}</td>
                 <td>{p.amount.toFixed(2)}</td>
                 <td>{p.method}</td>

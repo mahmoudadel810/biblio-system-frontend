@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useI18n } from '../i18n';
+import { fmtDate } from '../public/format';
+import { useCalendar } from '../public/useCalendar';
 import { api } from '../api/client';
 import type {
   CirculationDay,
@@ -9,6 +12,8 @@ import type {
 } from '../api/types';
 
 export default function ReportsPage() {
+  const { lang } = useI18n();
+  useCalendar();
   const [overview, setOverview] = useState<Overview | null>(null);
   const [popular, setPopular] = useState<PopularBook[]>([]);
   const [overdue, setOverdue] = useState<OverdueLoan[]>([]);
@@ -111,7 +116,7 @@ export default function ReportsPage() {
                   </td>
                   <td>{o.book_title}</td>
                   <td>{o.barcode}</td>
-                  <td>{new Date(o.due_at).toLocaleDateString()}</td>
+                  <td>{fmtDate(o.due_at, lang)}</td>
                   <td>
                     <span className="badge warn">{o.days_overdue}</span>
                   </td>
