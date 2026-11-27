@@ -25,6 +25,8 @@ export default function PublicLayout() {
         <nav className="pub-nav" aria-label={t('nav.main')}>
           <NavLink to="/books">{t('nav.books')}</NavLink>
           <NavLink to="/authors">{t('nav.authors')}</NavLink>
+          <NavLink to="/libraries">{t('nav.libraries')}</NavLink>
+          <NavLink to="/bookstores">{t('nav.bookstores')}</NavLink>
         </nav>
         <form onSubmit={onSearch} role="search" className="pub-search">
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('search.placeholder')} aria-label={t('search.placeholder')} />

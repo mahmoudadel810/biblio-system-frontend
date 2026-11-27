@@ -6,6 +6,7 @@ import BooksPage from './public/BooksPage';
 import BookPage from './public/BookPage';
 import { AuthorsPage, AuthorPage } from './public/AuthorsPage';
 import LibraryStartPage from './public/LibraryStartPage';
+import DirectoryPage from './public/DirectoryPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Staff and account screens load on demand; the public site stays in the main chunk.
@@ -23,6 +24,7 @@ const ProcurementPage = lazy(() => import('./pages/ProcurementPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const OrgQueuePage = lazy(() => import('./pages/OrgQueuePage'));
 const TransfersPage = lazy(() => import('./pages/TransfersPage'));
 
 export default function App() {
@@ -36,6 +38,8 @@ export default function App() {
         <Route path="/authors" element={<AuthorsPage />} />
         <Route path="/authors/:slug" element={<AuthorPage />} />
         <Route path="/library/start" element={<LibraryStartPage />} />
+        <Route path="/libraries" element={<DirectoryPage kind="library" />} />
+        <Route path="/bookstores" element={<DirectoryPage kind="bookstore" />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
@@ -110,6 +114,14 @@ export default function App() {
           element={
             <ProtectedRoute role="admin">
               <SettingsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/organizations"
+          element={
+            <ProtectedRoute role="admin">
+              <OrgQueuePage />
             </ProtectedRoute>
           }
         />

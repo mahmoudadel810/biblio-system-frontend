@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { api, ApiError } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
@@ -15,6 +15,8 @@ export default function LibraryStartPage() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  const [mine, setMine] = useState<{ id: string; name: string; kind: string; status: string; status_note: string | null }[]>([]);
+  useEffect(() => { if (user) api.get<typeof mine>('/me/organizations').then(setMine).catch(() => {}); }, [user, done]);
   useTitle(t('lib.title'));
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
 
@@ -44,6 +46,19 @@ export default function LibraryStartPage() {
           <p className="muted">{t('lib.needaccount')}</p>
           <Link className="pill" to="/register?next=/library/start">{t('register')}</Link>
           <Link className="pill ghost" to="/login?next=/library/start">{t('nav.signin')}</Link>
+        </div>
+      )}
+      {user && mine.length > 0 && (
+        <div className="mine-orgs">
+          <h2>{t('lib.mine')}</h2>
+          <ul className="mylist">
+            {mine.map((o) => (
+              <li key={o.id}>
+                <div><bdi>{o.name}</bdi>{o.status_note && <div className="muted small"><bdi>{o.status_note}</bdi></div>}</div>
+                <span className={`status-badge ${o.status}`}>{t('lib.status.' + o.status)}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
       {user && done && (
