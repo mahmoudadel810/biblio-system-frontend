@@ -3,6 +3,7 @@ import { useAuth } from '../auth/AuthContext';
 import { useI18n } from '../i18n';
 import Logo from './Logo';
 import { useCalendar } from '../public/useCalendar';
+import { useUnread } from './useUnread';
 
 export default function Layout() {
   const { user, logout } = useAuth();
@@ -11,6 +12,8 @@ export default function Layout() {
   const isAdmin = user?.role === 'admin';
   const { t, lang, setLang } = useI18n();
   const [cal, toggleCal] = useCalendar();
+  const unread = useUnread(!!user);
+  const badge = unread > 0 ? <span className="nav-badge" aria-label={`${unread}`}>{unread > 99 ? '99+' : unread}</span> : null;
 
   const onLogout = async () => {
     await logout();
@@ -26,7 +29,7 @@ export default function Layout() {
           <nav className="reader-nav" aria-label={t('nav.main')}>
             <NavLink to="/app" end>{t('reader.mylib')}</NavLink>
             <NavLink to="/books">{t('nav.books')}</NavLink>
-            <NavLink to="/notifications">{t('reader.notes')}</NavLink>
+            <NavLink to="/notifications">{t('reader.notes')}{badge}</NavLink>
           </nav>
           <div className="reader-user">
             <button type="button" className="pill ghost" onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>{t('lang.switch')}</button>
@@ -48,7 +51,7 @@ export default function Layout() {
         <nav className="nav">
           <NavLink to="/app">{t('staff.nav.dashboard')}</NavLink>
           <NavLink to="/catalog">{t('staff.nav.catalog')}</NavLink>
-          <NavLink to="/notifications">{t('reader.notes')}</NavLink>
+          <NavLink to="/notifications">{t('reader.notes')}{badge}</NavLink>
           {isStaff && <NavLink to="/loans">{t('staff.nav.loans')}</NavLink>}
           {isStaff && <NavLink to="/members">{t('staff.nav.members')}</NavLink>}
           {isStaff && <NavLink to="/transfers">{t('staff.nav.transfers')}</NavLink>}

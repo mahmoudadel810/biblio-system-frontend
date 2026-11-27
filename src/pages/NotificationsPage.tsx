@@ -4,6 +4,7 @@ import { fmtDateTime } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api } from '../api/client';
 import type { AppNotification } from '../api/types';
+import { NOTIF_CHANGED } from '../components/useUnread';
 
 export default function NotificationsPage() {
   const { t, lang } = useI18n();
@@ -23,6 +24,7 @@ export default function NotificationsPage() {
   const markRead = async (id: string) => {
     try {
       await api.post(`/notifications/${id}/read`);
+      window.dispatchEvent(new Event(NOTIF_CHANGED));
       load();
     } catch (e) {
       setError((e as Error).message);
