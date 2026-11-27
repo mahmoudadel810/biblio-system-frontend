@@ -11,6 +11,7 @@ import DirectoryPage from './public/DirectoryPage';
 import CreditsPage from './public/CreditsPage';
 const StoreListingsPage = lazy(() => import('./pages/StoreListingsPage'));
 const ReaderPage = lazy(() => import('./public/ReaderPage'));
+import ListPage from './public/ListPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Staff and account screens load on demand; the public site stays in the main chunk.
@@ -66,6 +67,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/books" element={<BooksPage />} />
         <Route path="/books/:slug" element={<BookPage />} />
+        <Route path="/lists/:id" element={<ListPage />} />
         <Route path="/read/:slug" element={<ReaderPage />} />
         <Route path="/store/:orgId/listings" element={<ProtectedRoute><StoreListingsPage /></ProtectedRoute>} />
         <Route path="/authors" element={<AuthorsPage />} />

@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { BookTile, Cover } from './Cards';
 import BorrowDialog from './BorrowDialog';
 import WhereToBuy from './WhereToBuy';
+import BookReviews from './BookReviews';
+import AddToList from './AddToList';
 import { api, ApiError } from '../api/client';
 import type { BookDetail } from './api';
 
@@ -72,6 +74,7 @@ export default function BookPage() {
           <button type="button" className="pill" onClick={borrow}>{t('book.borrow')}</button>
           {hasDigital && <button type="button" className="pill ghost" onClick={read}>{t('book.read')}</button>}
         </div>
+        {user && <AddToList slug={b.slug} />}
         {hasDigital && <p className="muted small">{t('read.loandays').replace('{n}', String(digital.data?.loan_days ?? ''))}</p>}
         {readErr && <p className="error small" role="alert">{readErr}</p>}
         {!hasDigital && !digital.loading && <p className="muted small">{t('read.nodigital')}</p>}
@@ -87,6 +90,7 @@ export default function BookPage() {
           </table>
         )}
         <WhereToBuy slug={b.slug} />
+        <BookReviews slug={b.slug} />
         {b.quotes.length > 0 && (
           <>
             <h2>{t('book.quotes')}</h2>
