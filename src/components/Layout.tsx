@@ -28,6 +28,7 @@ export default function Layout() {
           {isStaff && <NavLink to="/payments">Payments</NavLink>}
           {isStaff && <NavLink to="/reports">Reports</NavLink>}
           {isAdmin && <NavLink to="/settings">Settings</NavLink>}
+          {isAdmin && <NavLink to="/organizations">Organizations</NavLink>}
           {isAdmin && <NavLink to="/audit">Audit</NavLink>}
         </nav>
         <div className="topbar-user">

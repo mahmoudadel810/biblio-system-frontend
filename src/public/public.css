@@ -90,3 +90,10 @@ blockquote { margin: var(--s-4) 0; padding-inline-start: var(--s-4); border-inli
 @keyframes dlg-fade { from { opacity: 0 } to { opacity: 1 } }
 @keyframes dlg-in { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
 @media (prefers-reduced-motion: reduce) { .dlg-back, .dlg { animation: none; } }
+.dir-grid { list-style: none; margin: var(--s-6) 0 0; padding: 0; display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.dir-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card, 16px); padding: var(--s-4) var(--s-6); }
+.dir-card h2 { margin: 0 0 var(--s-2); font-size: 1.1rem; }
+.status-badge { display: inline-block; padding: 2px var(--s-3); border-radius: var(--r-pill); border: 2px solid var(--ink); font-weight: 700; font-size: .85rem; }
+.status-badge.verified { background: var(--ink); color: var(--paper); }
+.status-badge.rejected, .status-badge.suspended { border-style: dashed; }
+.mine-orgs { margin-block: var(--s-6); }
