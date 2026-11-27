@@ -117,3 +117,7 @@ blockquote { margin: var(--s-4) 0; padding-inline-start: var(--s-4); border-inli
 .credits-list h2 { margin: 0 0 var(--s-2); font-size: 1.125rem; }
 .credits-list p { margin: 0 0 var(--s-2); }
 .pub-foot a { color: inherit; text-decoration: underline; }
+
+.mascot { width: 120px; height: auto; margin-top: var(--s-6); --mx: 0px; --my: 0px; }
+.mascot .pupil { transform: translate(var(--mx), var(--my)); transition: transform 120ms var(--ease); }
+@media (prefers-reduced-motion: reduce) { .mascot .pupil { transition: none; } }
