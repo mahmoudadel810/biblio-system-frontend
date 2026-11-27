@@ -6,16 +6,27 @@ export default function AuditPage() {
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [entityType, setEntityType] = useState('');
   const [error, setError] = useState('');
+  const [more, setMore] = useState(false);
+  const PAGE = 200;
+
+  const query = useCallback((offset: number) => {
+    const p = new URLSearchParams();
+    if (entityType) p.set('entity_type', entityType);
+    if (offset) p.set('offset', String(offset));
+    const qs = p.toString();
+    return api.get<AuditLog[]>(`/audit-logs${qs ? `?${qs}` : ''}`);
+  }, [entityType]);
 
   const load = useCallback(() => {
-    const path = entityType
-      ? `/audit-logs?entity_type=${encodeURIComponent(entityType)}`
-      : '/audit-logs';
-    api
-      .get<AuditLog[]>(path)
-      .then(setLogs)
+    query(0)
+      .then((rows) => { setLogs(rows); setMore(rows.length === PAGE); })
       .catch((e) => setError(e.message));
-  }, [entityType]);
+  }, [query]);
+
+  const loadMore = () =>
+    query(logs.length)
+      .then((rows) => { setLogs((prev) => [...prev, ...rows]); setMore(rows.length === PAGE); })
+      .catch((e) => setError(e.message));
 
   useEffect(load, [load]);
 
@@ -55,6 +66,7 @@ export default function AuditPage() {
           ))}
         </tbody>
       </table>
+      {more && <button type="button" className="pill ghost" onClick={loadMore}>Load more</button>}
     </div>
   );
 }
