@@ -17,7 +17,7 @@ export default function Layout() {
       <header className="topbar">
         <span className="brand">Biblio</span>
         <nav className="nav">
-          <NavLink to="/">Dashboard</NavLink>
+          <NavLink to="/app">Dashboard</NavLink>
           <NavLink to="/catalog">Catalog</NavLink>
           <NavLink to="/notifications">Notifications</NavLink>
           {isStaff && <NavLink to="/loans">Loans</NavLink>}

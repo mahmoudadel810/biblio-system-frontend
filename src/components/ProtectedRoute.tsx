@@ -14,10 +14,14 @@ export default function ProtectedRoute({ children, role }: Props) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) return <p className="page-message">Loading…</p>;
+  if (loading) return <p className="page-message" role="status">Loading…</p>;
   if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
   if (role && ROLE_RANK[user.role] < ROLE_RANK[role]) {
-    return <Navigate to="/" replace />;
+    return (
+      <p className="page-message" role="alert">
+        403: you do not have access to this page.
+      </p>
+    );
   }
   return <>{children}</>;
 }

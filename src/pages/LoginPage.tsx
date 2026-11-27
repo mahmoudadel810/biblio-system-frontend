@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { safeNext } from '../auth/next';
 import { useAuth } from '../auth/AuthContext';
 import { ApiError } from '../api/client';
 
@@ -20,7 +21,7 @@ export default function LoginPage() {
       await login(email, password);
       const from = (location.state as { from?: { pathname: string } } | null)
         ?.from?.pathname;
-      navigate(from ?? '/', { replace: true });
+      navigate(from ?? safeNext(location.search), { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'login failed');
     } finally {

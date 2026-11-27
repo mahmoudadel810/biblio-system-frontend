@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { safeNext } from '../auth/next';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { ApiError } from '../api/client';
 
 export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +20,7 @@ export default function RegisterPage() {
     setError('');
     try {
       await register(email, password, fullName);
-      navigate('/', { replace: true });
+      navigate(safeNext(location.search), { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'registration failed');
     } finally {
@@ -57,7 +59,7 @@ export default function RegisterPage() {
         </button>
       </form>
       <p className="muted">
-        Already registered? <Link to="/login">Sign in</Link>
+        Already registered? <Link to={`/login${location.search}`}>Sign in</Link>
       </p>
     </div>
   );

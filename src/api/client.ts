@@ -74,14 +74,19 @@ async function rawRequest<T>(
   if (res.status === 204) return undefined as T;
 
   const text = await res.text();
-  const data = text ? JSON.parse(text) : undefined;
+  let data: { error?: unknown } | undefined;
+  try {
+    data = text ? JSON.parse(text) : undefined;
+  } catch {
+    data = undefined;
+  }
   if (!res.ok) {
     const message =
       (data && typeof data.error === 'string' && data.error) ||
       `request failed with status ${res.status}`;
     throw new ApiError(res.status, message);
   }
-  return data as T;
+  return data as unknown as T;
 }
 
 export async function request<T>(
