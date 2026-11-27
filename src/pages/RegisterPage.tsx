@@ -5,6 +5,7 @@ import { useAuth } from '../auth/AuthContext';
 import { ApiError } from '../api/client';
 import { useI18n } from '../i18n';
 import AuthLang from '../components/AuthLang';
+import GoogleButton from '../components/GoogleButton';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -35,6 +36,7 @@ export default function RegisterPage() {
     <div className="auth-card">
       <AuthLang />
       <h1>{t('auth.regTitle')}</h1>
+      <GoogleButton />
       <form onSubmit={onSubmit}>
         <input
           placeholder={t('auth.fullName')}

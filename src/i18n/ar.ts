@@ -485,4 +485,12 @@ export const ar: Record<string, string> = {
   'notfound.title': "الصفحة غير موجودة",
   'notfound.body': "ربما الرابط قديم أو مكتوب بشكل خاطئ.",
   'notfound.home': "الصفحة الرئيسية",
+  'auth.google': "المتابعة عبر Google",
+  'auth.or': "أو",
+  'auth.google.denied': "تم إلغاء تسجيل الدخول عبر Google.",
+  'auth.google.invalid': "تعذّر إكمال تسجيل الدخول عبر Google. حاول مرة أخرى.",
+  'auth.google.expired': "استغرق تسجيل الدخول وقتًا طويلًا. حاول مرة أخرى.",
+  'auth.google.exchange': "لم تؤكد Google تسجيل الدخول. حاول مرة أخرى.",
+  'auth.google.unverified': "بريدك في Google غير مؤكَّد، لذا لا يمكن استخدامه هنا.",
+  'auth.google.disabled': "هذا الحساب معطّل. تواصل مع المكتبة.",
 };

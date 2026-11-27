@@ -3,7 +3,7 @@
 
 import type { TokenPair } from './types';
 
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
+export const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
 
 const ACCESS_KEY = 'biblio.access_token';
 const REFRESH_KEY = 'biblio.refresh_token';
