@@ -3,21 +3,20 @@ import { api, ApiError } from '../api/client';
 import type { Branch, Member, Role } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
 import { useI18n } from '../i18n';
+import { usePager } from '../components/usePager';
 
 export default function MembersPage() {
   const { user } = useAuth();
   const { t } = useI18n();
   const isAdmin = user?.role === 'admin';
-  const [members, setMembers] = useState<Member[]>([]);
+  const pager = usePager<Member>('/members', 200);
+  const members = pager.rows;
   const [branches, setBranches] = useState<Branch[]>([]);
   const [branchForm, setBranchForm] = useState({ name: '', address: '' });
   const [error, setError] = useState('');
 
   const load = useCallback(() => {
-    api
-      .get<Member[]>('/members')
-      .then(setMembers)
-      .catch((e) => setError(e.message));
+    pager.reload();
     api
       .get<Branch[]>('/branches')
       .then(setBranches)
@@ -107,6 +106,7 @@ export default function MembersPage() {
             ))}
           </tbody>
         </table>
+        {pager.more && <button type="button" className="pill ghost" onClick={pager.loadMore}>{t('more')}</button>}
       </div>
 
       <div className="panel">

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useI18n } from '../i18n';
+import { usePager } from '../components/usePager';
 import { fmtDate, fmtMoney } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
@@ -19,7 +20,8 @@ export default function ProcurementPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [orders, setOrders] = useState<PurchaseOrderWithItems[]>([]);
+  const pager = usePager<PurchaseOrderWithItems>('/purchase-orders?items=true', 100);
+  const orders = pager.rows;
   const [branches, setBranches] = useState<Branch[]>([]);
   const [bookPick, setBookPick] = useState<PickItem | null>(null);
   const [supplierForm, setSupplierForm] = useState({ name: '', email: '' });
@@ -36,11 +38,7 @@ export default function ProcurementPage() {
   const load = useCallback(async () => {
     try {
       setSuppliers(await api.get<Supplier[]>('/suppliers'));
-      const list = await api.get<{ id: string }[]>('/purchase-orders');
-      const full = await Promise.all(
-        list.map((o) => api.get<PurchaseOrderWithItems>(`/purchase-orders/${o.id}`)),
-      );
-      setOrders(full);
+      pager.reload();
     } catch (e) {
       setError((e as Error).message);
     }
@@ -55,7 +53,7 @@ export default function ProcurementPage() {
   }, [load]);
 
   const supplierName = (id: string) =>
-    suppliers.find((s) => s.id === id)?.name ?? id;
+    suppliers.find((s) => s.id === id)?.name ?? t('common.unknown');
 
   const addSupplier = async (e: FormEvent) => {
     e.preventDefault();
@@ -292,6 +290,7 @@ export default function ProcurementPage() {
             ))}
           </tbody>
         </table>
+        {pager.more && <button type="button" className="pill ghost" onClick={pager.loadMore}>{t('more')}</button>}
       </div>
     </>
   );

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useI18n } from '../i18n';
+import { usePager } from '../components/usePager';
 import { fmtDate } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
@@ -11,7 +12,8 @@ import { findCopies } from '../components/lookups';
 export default function TransfersPage() {
   const { lang, t } = useI18n();
   useCalendar();
-  const [transfers, setTransfers] = useState<Transfer[]>([]);
+  const pager = usePager<Transfer>('/transfers', 100);
+  const transfers = pager.rows;
   const [branches, setBranches] = useState<Branch[]>([]);
   const [form, setForm] = useState({ copyId: '', toBranchId: '' });
   const [copyPick, setCopyPick] = useState<PickItem | null>(null);
@@ -19,13 +21,10 @@ export default function TransfersPage() {
   const [message, setMessage] = useState('');
 
   const branchName = (id: string) =>
-    branches.find((b) => b.id === id)?.name ?? id;
+    branches.find((b) => b.id === id)?.name ?? t('common.unknown');
 
   const load = useCallback(() => {
-    api
-      .get<Transfer[]>('/transfers')
-      .then(setTransfers)
-      .catch((e) => setError(e.message));
+    pager.reload();
     api
       .get<Branch[]>('/branches')
       .then(setBranches)
@@ -152,6 +151,7 @@ export default function TransfersPage() {
             ))}
           </tbody>
         </table>
+        {pager.more && <button type="button" className="pill ghost" onClick={pager.loadMore}>{t('more')}</button>}
       </div>
     </>
   );

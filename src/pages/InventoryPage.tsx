@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useI18n } from '../i18n';
+import { usePager } from '../components/usePager';
 import { fmtDateTime } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
@@ -13,7 +14,8 @@ export default function InventoryPage() {
   const st = (v: string) => { const r = t(`copy.s.${v}`); return r === `copy.s.${v}` ? v : r; };
   useCalendar();
   const [stock, setStock] = useState<StockLevel[]>([]);
-  const [adjustments, setAdjustments] = useState<Adjustment[]>([]);
+  const pager = usePager<Adjustment>('/inventory/adjustments', 100);
+  const adjustments = pager.rows;
   const [branches, setBranches] = useState<Branch[]>([]);
   const [branchFilter, setBranchFilter] = useState('');
   const [form, setForm] = useState({ copyId: '', toStatus: 'lost', reason: '' });
@@ -29,10 +31,7 @@ export default function InventoryPage() {
       .get<StockLevel[]>(stockPath)
       .then(setStock)
       .catch((e) => setError(e.message));
-    api
-      .get<Adjustment[]>('/inventory/adjustments')
-      .then(setAdjustments)
-      .catch(() => {});
+    pager.reload();
   }, [branchFilter]);
 
   useEffect(() => {
@@ -44,7 +43,7 @@ export default function InventoryPage() {
   }, [load]);
 
   const branchName = (id: string) =>
-    branches.find((b) => b.id === id)?.name ?? id;
+    branches.find((b) => b.id === id)?.name ?? t('common.unknown');
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -158,6 +157,7 @@ export default function InventoryPage() {
             ))}
           </tbody>
         </table>
+        {pager.more && <button type="button" className="pill ghost" onClick={pager.loadMore}>{t('more')}</button>}
       </div>
     </>
   );

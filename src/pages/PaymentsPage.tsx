@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useI18n } from '../i18n';
+import { usePager } from '../components/usePager';
 import { fmtDateTime, fmtMoney, fineReason } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
@@ -8,7 +9,8 @@ import type { Fine, Payment, PaymentSummary } from '../api/types';
 export default function PaymentsPage() {
   const { lang, t } = useI18n();
   useCalendar();
-  const [payments, setPayments] = useState<Payment[]>([]);
+  const pager = usePager<Payment>('/payments', 100);
+  const payments = pager.rows;
   const [summary, setSummary] = useState<PaymentSummary | null>(null);
   const [unpaid, setUnpaid] = useState<Fine[]>([]);
   const [form, setForm] = useState({ fineId: '', method: 'cash' });
@@ -16,10 +18,7 @@ export default function PaymentsPage() {
   const [message, setMessage] = useState('');
 
   const load = useCallback(() => {
-    api
-      .get<Payment[]>('/payments')
-      .then(setPayments)
-      .catch((e) => setError(e.message));
+    pager.reload();
     api
       .get<PaymentSummary>('/payments/summary')
       .then(setSummary)
@@ -125,6 +124,7 @@ export default function PaymentsPage() {
             ))}
           </tbody>
         </table>
+        {pager.more && <button type="button" className="pill ghost" onClick={pager.loadMore}>{t('more')}</button>}
       </div>
     </>
   );
