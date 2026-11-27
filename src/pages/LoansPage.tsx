@@ -10,6 +10,8 @@ export default function LoansPage() {
   const [memberFilter, setMemberFilter] = useState('');
   const [borrowForm, setBorrowForm] = useState({ copyId: '', memberId: '' });
   const [error, setError] = useState('');
+  const [more, setMore] = useState(false);
+  const PAGE = 100;
   const [message, setMessage] = useState('');
 
   const load = useCallback(() => {
@@ -18,7 +20,7 @@ export default function LoansPage() {
       : '/loans';
     api
       .get<Loan[]>(path)
-      .then(setLoans)
+      .then((rows) => { setLoans(rows); setMore(rows.length === PAGE); })
       .catch((e) => setError(e.message));
     api
       .get<Fine[]>('/fines?status=unpaid')
@@ -27,6 +29,16 @@ export default function LoansPage() {
   }, [memberFilter]);
 
   useEffect(load, [load]);
+
+  const loadMore = () => {
+    const p = new URLSearchParams();
+    if (memberFilter) p.set('member_id', memberFilter);
+    p.set('offset', String(loans.length));
+    api
+      .get<Loan[]>(`/loans?${p.toString()}`)
+      .then((rows) => { setLoans((prev) => [...prev, ...rows]); setMore(rows.length === PAGE); })
+      .catch((e) => setError(e.message));
+  };
 
   const borrow = async (e: FormEvent) => {
     e.preventDefault();
@@ -147,6 +159,7 @@ export default function LoansPage() {
             ))}
           </tbody>
         </table>
+        {more && <button type="button" className="pill ghost" onClick={loadMore}>Load more</button>}
       </div>
 
       <div className="panel">
