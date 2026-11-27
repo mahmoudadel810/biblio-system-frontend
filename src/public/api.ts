@@ -8,7 +8,7 @@ export async function pub<T>(path: string): Promise<T> {
 
 export interface AuthorRef { slug: string | null; name: string; name_ar: string | null }
 export interface BookCard {
-  id: string; slug: string; title: string; title_ar: string | null; cover_url: string | null;
+  id: string; slug: string; title: string; title_ar: string | null; cover_url: string | null; cover_url_ar?: string | null; tag?: string | null;
   published_year: number | null; language: string; featured: boolean; is_public_domain: boolean;
   authors: AuthorRef[]; available_copies: number;
 }
@@ -23,7 +23,7 @@ export interface AuthorCard {
   birth_year: number | null; death_year: number | null; nationality: string | null; book_count: number;
 }
 export interface BookDetail extends BookCard {
-  subtitle: string | null; description: string | null; description_ar: string | null;
+  subtitle: string | null; subtitle_ar: string | null; license: string | null; description: string | null; description_ar: string | null;
   publisher: string | null; page_count: number | null;
   categories: { slug: string | null; name: string; name_ar: string | null }[];
   why_this_book: { why: string; why_ar: string | null; written_by: string } | null;
