@@ -4,6 +4,7 @@ import HomePage from './public/HomePage';
 import BooksPage from './public/BooksPage';
 import BookPage from './public/BookPage';
 import { AuthorsPage, AuthorPage } from './public/AuthorsPage';
+import LibraryStartPage from './public/LibraryStartPage';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuditPage from './pages/AuditPage';
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/books/:slug" element={<BookPage />} />
         <Route path="/authors" element={<AuthorsPage />} />
         <Route path="/authors/:slug" element={<AuthorPage />} />
+        <Route path="/library/start" element={<LibraryStartPage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />

@@ -11,22 +11,24 @@ export default function PublicLayout() {
   const [q, setQ] = useState('');
   const onSearch = (e: FormEvent) => {
     e.preventDefault();
-    navigate(`/books?q=${encodeURIComponent(q.trim())}`);
+    const term = q.trim();
+    if (term) navigate(`/books?q=${encodeURIComponent(term)}`);
   };
   return (
     <>
-      <a className="skip" href="#main">Skip to content</a>
+      <a className="skip" href="#main">{t('skip')}</a>
       <div className="partner-line">
         <Link to="/library/start">{t('nav.partner')}</Link>
       </div>
       <header className="pub-head">
-        <Link to="/" aria-label="Biblio home"><Logo lang={lang} /></Link>
-        <nav className="pub-nav" aria-label="Main">
+        <Link to="/" aria-label="Biblio"><Logo lang={lang} /></Link>
+        <nav className="pub-nav" aria-label={t('nav.main')}>
           <NavLink to="/books">{t('nav.books')}</NavLink>
           <NavLink to="/authors">{t('nav.authors')}</NavLink>
         </nav>
         <form onSubmit={onSearch} role="search" className="pub-search">
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('search.placeholder')} aria-label={t('search.placeholder')} />
+          <button type="submit" className="sr-only">{t('search.go')}</button>
         </form>
         <button type="button" className="pill ghost" onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>
           {t('lang.switch')}
@@ -43,7 +45,7 @@ export default function PublicLayout() {
       <main id="main"><Outlet /></main>
       <footer className="pub-foot">
         <span>Biblio</span>
-        <span>Author text from Wikipedia and Wikiquote (CC BY-SA). Covers from Open Library.</span>
+        <span>{t('footer.credit')}</span>
       </footer>
     </>
   );

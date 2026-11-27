@@ -57,3 +57,23 @@ blockquote { margin: var(--s-4) 0; padding-inline-start: var(--s-4); border-inli
   .book .cover { position: static; max-width: 220px; }
   .hero, .band { padding-inline: var(--s-4); }
 }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero { display: grid; gap: var(--s-8); grid-template-columns: 1fr; align-items: center; }
+.hero-book { perspective: 900px; justify-self: center; width: min(52vw, 240px); }
+.hero-book-inner { transform: rotateY(var(--tilt-x, -10deg)) rotateX(var(--tilt-y, 0deg)); transform-style: preserve-3d; transition: transform 200ms var(--ease); box-shadow: -14px 14px 0 var(--ink); border-radius: var(--r-inner); }
+.hero-book .cover { display: block; }
+@media (min-width: 900px) { .hero { grid-template-columns: 1.4fr 1fr; padding-inline: var(--s-12); } .hero-book { width: 300px; justify-self: end; margin-inline-end: var(--s-8); } }
+@media (prefers-reduced-motion: reduce) { .hero-book-inner, .reveal { transition: none; } }
+.cover.fallback { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--s-1); padding: var(--s-4) var(--s-3) var(--s-4) var(--s-6); overflow: hidden; }
+.cover.fallback .spine { position: absolute; inset-block: 0; inset-inline-start: 0; width: 14px; }
+.cover.fallback strong { font-size: 1.1rem; line-height: 1.2; }
+.cover.fallback small { opacity: .85; }
+.pager { display: flex; align-items: center; justify-content: center; gap: var(--s-4); margin-top: var(--s-8); }
+.pill:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.narrow { max-width: 720px; margin-inline: auto; }
+.form { display: grid; gap: var(--s-4); }
+.form label { display: grid; gap: var(--s-1); font-weight: 600; }
+.form input, .form select, .form textarea { padding: var(--s-3) var(--s-4); border: 1px solid var(--line); border-radius: var(--r-inner); background: var(--card); font: inherit; color: inherit; }
+.form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.tile .cover, .book .cover { aspect-ratio: 2 / 3; width: 100%; object-fit: cover; }
+.tile .cover.round { aspect-ratio: 1 / 1; }

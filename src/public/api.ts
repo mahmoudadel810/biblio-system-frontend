@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
 
 export async function pub<T>(path: string): Promise<T> {
   const res = await fetch(`${API_URL}/public${path}`);
-  if (!res.ok) throw new Error(`request failed (${res.status})`);
+  if (!res.ok) throw Object.assign(new Error(`request failed (${res.status})`), { status: res.status });
   return res.json() as Promise<T>;
 }
 
