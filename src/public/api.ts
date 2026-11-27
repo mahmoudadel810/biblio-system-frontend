@@ -1,9 +1,23 @@
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
 
-export async function pub<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_URL}/public${path}`);
+// Small in-memory cache for public GETs. It matches the server's 60 s max-age, so revisiting a page is instant
+// and never shows data older than the server would allow.
+const TTL_MS = 60_000;
+const cache = new Map<string, { at: number; data: unknown }>();
+export const cached = <T>(path: string): T | undefined => {
+  const hit = cache.get(path);
+  return hit && Date.now() - hit.at < TTL_MS ? (hit.data as T) : undefined;
+};
+
+export async function pub<T>(path: string, signal?: AbortSignal): Promise<T> {
+  const hit = cached<T>(path);
+  if (hit !== undefined) return hit;
+  const res = await fetch(`${API_URL}/public${path}`, { signal });
   if (!res.ok) throw Object.assign(new Error(`request failed (${res.status})`), { status: res.status });
-  return res.json() as Promise<T>;
+  const data = (await res.json()) as T;
+  cache.set(path, { at: Date.now(), data });
+  if (cache.size > 200) cache.delete(cache.keys().next().value as string);
+  return data;
 }
 
 export interface AuthorRef { slug: string | null; name: string; name_ar: string | null }

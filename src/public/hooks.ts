@@ -1,28 +1,34 @@
 import { useEffect, useState } from 'react';
-import { pub } from './api';
+import { cached, pub } from './api';
 
 export function useFetch<T>(path: string) {
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T | null>(() => cached<T>(path) ?? null);
   const [error, setError] = useState('');
   const [status, setStatus] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => cached<T>(path) === undefined);
   useEffect(() => {
-    let live = true;
-    setLoading(true);
+    // Abort the request when the path changes or the page unmounts, so a slow old response cannot overwrite a newer one.
+    const ctl = new AbortController();
     setError('');
     setStatus(0);
-    pub<T>(path)
-      .then((d) => live && setData(d))
+    const hit = cached<T>(path);
+    if (hit !== undefined) {
+      setData(hit);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    pub<T>(path, ctl.signal)
+      .then((d) => setData(d))
       .catch((e: Error & { status?: number }) => {
-        if (live) {
-          setError(e.message);
-          setStatus(e.status ?? 0);
-        }
+        if (ctl.signal.aborted) return;
+        setError(e.message);
+        setStatus(e.status ?? 0);
       })
-      .finally(() => live && setLoading(false));
-    return () => {
-      live = false;
-    };
+      .finally(() => {
+        if (!ctl.signal.aborted) setLoading(false);
+      });
+    return () => ctl.abort();
   }, [path]);
   return { data, error, status, loading };
 }
