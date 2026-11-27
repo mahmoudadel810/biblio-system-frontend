@@ -6,7 +6,7 @@ import { api, ApiError } from '../api/client';
 import type { Branch, Transfer } from '../api/types';
 
 export default function TransfersPage() {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   useCalendar();
   const [transfers, setTransfers] = useState<Transfer[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -40,10 +40,10 @@ export default function TransfersPage() {
         to_branch_id: form.toBranchId,
       });
       setForm({ copyId: '', toBranchId: '' });
-      setMessage('Transfer requested.');
+      setMessage(t('tr.requested'));
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'request failed');
+      setError(err instanceof ApiError ? err.message : t('tr.reqFail'));
     }
   };
 
@@ -55,17 +55,17 @@ export default function TransfersPage() {
       setMessage(ok);
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'action failed');
+      setError(err instanceof ApiError ? err.message : t('tr.actFail'));
     }
   };
 
   return (
     <>
       <div className="panel">
-        <h2>Request a transfer</h2>
+        <h2>{t('tr.req')}</h2>
         <form className="inline-form" onSubmit={request}>
           <input
-            placeholder="Copy ID"
+            placeholder={t('tr.copyId')}
             value={form.copyId}
             onChange={(e) => setForm({ ...form, copyId: e.target.value })}
             required
@@ -75,7 +75,7 @@ export default function TransfersPage() {
             onChange={(e) => setForm({ ...form, toBranchId: e.target.value })}
             required
           >
-            <option value="">Destination branch</option>
+            <option value="">{t('tr.dest')}</option>
             {branches
               .filter((b) => b.is_active)
               .map((b) => (
@@ -84,59 +84,59 @@ export default function TransfersPage() {
                 </option>
               ))}
           </select>
-          <button type="submit">Request</button>
+          <button type="submit">{t('tr.requestBtn')}</button>
         </form>
         {message && <p>{message}</p>}
         {error && <p className="error-text">{error}</p>}
       </div>
 
       <div className="panel">
-        <h2>Transfers</h2>
+        <h2>{t('tr.title')}</h2>
         <table>
           <thead>
             <tr>
-              <th>Copy</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Status</th>
-              <th>Requested</th>
+              <th>{t('tr.copy')}</th>
+              <th>{t('tr.from')}</th>
+              <th>{t('tr.to')}</th>
+              <th>{t('common.status')}</th>
+              <th>{t('tr.reqAt')}</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {transfers.map((t) => (
-              <tr key={t.id}>
-                <td className="muted">{t.copy_id}</td>
-                <td>{branchName(t.from_branch_id)}</td>
-                <td>{branchName(t.to_branch_id)}</td>
+            {transfers.map((x) => (
+              <tr key={x.id}>
+                <td className="muted">{x.copy_id}</td>
+                <td>{branchName(x.from_branch_id)}</td>
+                <td>{branchName(x.to_branch_id)}</td>
                 <td>
                   <span
-                    className={`badge ${t.status === 'in_transit' ? 'warn' : ''}`}
+                    className={`badge ${x.status === 'in_transit' ? 'warn' : ''}`}
                   >
-                    {t.status}
+                    {t(`tr.s.${x.status}`)}
                   </span>
                 </td>
-                <td>{fmtDate(t.created_at, lang)}</td>
+                <td>{fmtDate(x.created_at, lang)}</td>
                 <td>
-                  {t.status === 'in_transit' && (
+                  {x.status === 'in_transit' && (
                     <>
                       <button
                         type="button"
                         className="secondary"
                         onClick={() =>
-                          act(`/transfers/${t.id}/receive`, 'Received.')
+                          act(`/transfers/${x.id}/receive`, t('tr.received'))
                         }
                       >
-                        Receive
+                        {t('tr.receive')}
                       </button>{' '}
                       <button
                         type="button"
                         className="danger"
                         onClick={() =>
-                          act(`/transfers/${t.id}/cancel`, 'Cancelled.')
+                          act(`/transfers/${x.id}/cancel`, t('tr.cancelled'))
                         }
                       >
-                        Cancel
+                        {t('tr.cancel')}
                       </button>
                     </>
                   )}
