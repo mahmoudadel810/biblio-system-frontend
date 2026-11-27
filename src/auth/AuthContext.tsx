@@ -13,6 +13,7 @@ import {
 import {
   api,
   clearTokens,
+  getRefreshToken,
   getAccessToken,
   storeTokens,
   type ApiError,
@@ -110,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(async () => {
     try {
-      await api.post('/auth/logout');
+      await api.post('/auth/logout', { refresh_token: getRefreshToken() });
     } finally {
       clearTokens();
       setUser(null);

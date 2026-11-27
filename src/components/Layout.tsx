@@ -32,6 +32,7 @@ export default function Layout() {
             <NavLink to="/app" end>{t('reader.mylib')}</NavLink>
             <NavLink to="/books">{t('nav.books')}</NavLink>
             <NavLink to="/notifications">{t('reader.notes')}{badge}</NavLink>
+            <NavLink to="/account">{t('nav.account')}</NavLink>
           </nav>
           <div className="reader-user">
             <button type="button" className="pill ghost" onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>{t('lang.switch')}</button>
@@ -68,7 +69,7 @@ export default function Layout() {
           {isAdmin && <NavLink to="/audit">{t('staff.nav.audit')}</NavLink>}
         </nav>
         <div className="topbar-user">
-          <span>{user?.fullName || user?.role}</span>
+          <NavLink to="/account">{user?.fullName || t('nav.account')}</NavLink>
           <button type="button" className="secondary" onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>{t('lang.switch')}</button>
           <button type="button" className="secondary" aria-pressed={cal === 'hijri'} onClick={toggleCal}>
             {t(cal === 'hijri' ? 'my.useGregorian' : 'my.useHijri')}

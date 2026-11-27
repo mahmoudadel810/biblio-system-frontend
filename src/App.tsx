@@ -32,11 +32,12 @@ const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const OrgQueuePage = lazy(() => import('./pages/OrgQueuePage'));
 const TransfersPage = lazy(() => import('./pages/TransfersPage'));
+const AccountPage = lazy(() => import('./pages/AccountPage'));
 const ImportPage = lazy(() => import('./pages/ImportPage'));
 
 // Staff and account screens have no page-level title hook; give each route a title.
 const ROUTE_TITLES: Record<string, string> = {
-  '/login': 'Sign in', '/forgot-password': 'Reset password', '/reset-password': 'New password', '/register': 'Create account', '/app': 'My library', '/catalog': 'Catalog',
+  '/login': 'Sign in', '/forgot-password': 'Reset password', '/reset-password': 'New password', '/register': 'Create account', '/app': 'My library', '/account': 'Account', '/catalog': 'Catalog',
   '/notifications': 'Notifications', '/loans': 'Loans', '/members': 'Members', '/transfers': 'Transfers',
   '/procurement': 'Procurement', '/inventory': 'Inventory', '/payments': 'Payments', '/reports': 'Reports',
   '/import': 'Import', '/settings': 'Settings', '/organizations': 'Organizations', '/audit': 'Audit log',
@@ -84,6 +85,7 @@ export default function App() {
         <Route path="/app" element={<DashboardPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/account" element={<AccountPage />} />
         <Route
           path="/loans"
           element={
