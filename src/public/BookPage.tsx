@@ -34,7 +34,9 @@ export default function BookPage() {
     <article className="band book">
       <Cover book={{ ...b, title }} eager />
       <div>
+        {b.tag && <span className="tag">{b.tag}</span>}
         <h1>{title}</h1>
+        {(ar && b.subtitle_ar ? b.subtitle_ar : b.subtitle) && <p className="muted">{ar && b.subtitle_ar ? b.subtitle_ar : b.subtitle}</p>}
         <p className="muted">
           {b.authors.map((a, i) => (
             <span key={a.name}>
@@ -78,7 +80,7 @@ export default function BookPage() {
             ))}
           </>
         )}
-        <p className="small muted">{t('footer.credit')}</p>
+        <p className="small muted">{b.license ?? t('footer.credit')}</p>
       </div>
       {b.related.length > 0 && (
         <section className="related">

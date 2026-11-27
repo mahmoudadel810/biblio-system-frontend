@@ -38,7 +38,7 @@ export function Cover({
   decorative = false,
   eager = false,
 }: {
-  book: Pick<BookCard, 'title' | 'cover_url' | 'authors'>;
+  book: Pick<BookCard, 'title' | 'cover_url' | 'authors'> & { cover_url_ar?: string | null };
   decorative?: boolean;
   eager?: boolean;
 }) {
@@ -46,11 +46,12 @@ export function Cover({
   const [failed, setFailed] = useState(false);
   const a = book.authors[0];
   const author = a ? (lang === 'ar' && a.name_ar ? a.name_ar : a.name) : undefined;
-  if (!book.cover_url || failed) return <FallbackCover title={book.title} author={author} />;
+  const src = lang === 'ar' && book.cover_url_ar ? book.cover_url_ar : book.cover_url;
+  if (!src || failed) return <FallbackCover title={book.title} author={author} />;
   return (
     <img
       className="cover"
-      src={book.cover_url}
+      src={src}
       alt={decorative ? '' : `${t('cover.alt')} ${book.title}`}
       loading={eager ? 'eager' : 'lazy'}
       width={200}
@@ -68,6 +69,7 @@ export function BookTile({ book }: { book: BookCard }) {
   return (
     <Link to={`/books/${encodeURIComponent(book.slug)}`} className="tile reveal">
       <Cover book={{ ...book, title }} decorative />
+      {book.tag && <span className="tag">{book.tag}</span>}
       <strong>{title}</strong>
       <span className="muted">{author}</span>
     </Link>
