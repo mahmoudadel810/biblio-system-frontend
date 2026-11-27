@@ -131,6 +131,13 @@ export interface LibrarySettings {
   max_renewals: number;
   fine_per_day: number;
   reservation_days: number;
+  max_loan_days: number;
+  max_fine_per_loan: number;
+  lost_fee: number;
+  damaged_fee: number;
+  digital_loan_days: number;
+  hold_pickup_days: number;
+  max_open_loans: number;
 }
 
 export interface AuditLog {

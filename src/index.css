@@ -239,3 +239,9 @@ form.inline-form {
   text-align: center;
   color: var(--muted);
 }
+
+.mylib h2 { margin: 24px 0 8px; font-size: 18px; }
+.mylib h2:first-child { margin-top: 0; }
+.mylist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.mylist li { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.mylib .pill { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--accent); background: transparent; color: var(--accent); font: inherit; cursor: pointer; }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api/client';
 import type { Dashboard } from '../api/types';
+import MyLibrary from './MyLibrary';
 
 export default function DashboardPage() {
   const [data, setData] = useState<Dashboard | null>(null);
@@ -38,63 +39,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="panel">
-        <h2>My loans</h2>
-        {data.open_loans.length === 0 ? (
-          <p className="muted">No open loans.</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Book</th>
-                <th>Barcode</th>
-                <th>Due</th>
-                <th>Renewals</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.open_loans.map((loan) => (
-                <tr key={loan.loan_id}>
-                  <td>{loan.book_title}</td>
-                  <td>{loan.barcode}</td>
-                  <td>{new Date(loan.due_at).toLocaleDateString()}</td>
-                  <td>{loan.renewed_count}</td>
-                  <td>
-                    {loan.is_overdue && (
-                      <span className="badge warn">overdue</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-
-      <div className="panel">
-        <h2>My reservations</h2>
-        {data.active_reservations.length === 0 ? (
-          <p className="muted">No active reservations.</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Book</th>
-                <th>Branch</th>
-                <th>Expires</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.active_reservations.map((res) => (
-                <tr key={res.reservation_id}>
-                  <td>{res.book_title}</td>
-                  <td>{res.branch_name}</td>
-                  <td>{new Date(res.expires_at).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        <MyLibrary />
       </div>
     </>
   );
