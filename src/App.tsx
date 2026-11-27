@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import PublicLayout from './public/PublicLayout';
 import HomePage from './public/HomePage';
 import BooksPage from './public/BooksPage';
@@ -29,8 +30,27 @@ const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const OrgQueuePage = lazy(() => import('./pages/OrgQueuePage'));
 const TransfersPage = lazy(() => import('./pages/TransfersPage'));
 
+// Staff and account screens have no page-level title hook; give each route a title.
+const ROUTE_TITLES: Record<string, string> = {
+  '/login': 'Sign in', '/register': 'Create account', '/app': 'My library', '/catalog': 'Catalog',
+  '/notifications': 'Notifications', '/loans': 'Loans', '/members': 'Members', '/transfers': 'Transfers',
+  '/procurement': 'Procurement', '/inventory': 'Inventory', '/payments': 'Payments', '/reports': 'Reports',
+  '/settings': 'Settings', '/organizations': 'Organizations', '/audit': 'Audit log',
+};
+function RouteTitle() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const t = ROUTE_TITLES[pathname];
+    if (t) document.title = `${t} | Biblio`;
+    else if (/^\/store\/[^/]+\/listings$/.test(pathname)) document.title = 'Store listings | Biblio';
+  }, [pathname]);
+  return null;
+}
+
 export default function App() {
   return (
+    <>
+    <RouteTitle />
     <Suspense fallback={<p className="page-message" role="status">…</p>}>
     <Routes>
       <Route element={<PublicLayout />}>
@@ -141,5 +161,6 @@ export default function App() {
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     </Suspense>
+    </>
   );
 }
