@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { Fragment, useCallback, useEffect, useState, type FormEvent } from 'react';
 import { api, ApiError } from '../api/client';
-import type { Book, Branch } from '../api/types';
+import type { Book, Branch, Copy } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
 
 export default function CatalogPage() {
@@ -13,6 +13,24 @@ export default function CatalogPage() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [newBook, setNewBook] = useState({ isbn: '', title: '', publisher: '' });
+  const [copies, setCopies] = useState<Record<string, Copy[]>>({});
+
+  const toggleCopies = async (bookId: string) => {
+    if (copies[bookId]) {
+      setCopies((prev) => {
+        const next = { ...prev };
+        delete next[bookId];
+        return next;
+      });
+      return;
+    }
+    try {
+      const rows = await api.get<Copy[]>(`/books/${bookId}/copies`);
+      setCopies((prev) => ({ ...prev, [bookId]: rows }));
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'could not load copies');
+    }
+  };
 
   const load = useCallback((q: string) => {
     const path = q ? `/books?q=${encodeURIComponent(q)}` : '/books';
@@ -107,28 +125,56 @@ export default function CatalogPage() {
               <th>ISBN</th>
               <th>Publisher</th>
               <th>Year</th>
-              {!isStaff && <th></th>}
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {books.map((book) => (
-              <tr key={book.id}>
-                <td>{book.title}</td>
-                <td>{book.isbn}</td>
-                <td>{book.publisher ?? '—'}</td>
-                <td>{book.published_year ?? '—'}</td>
-                {!isStaff && (
+              <Fragment key={book.id}>
+                <tr>
+                  <td>{book.title}</td>
+                  <td>{book.isbn}</td>
+                  <td>{book.publisher ?? '—'}</td>
+                  <td>{book.published_year ?? '—'}</td>
                   <td>
                     <button
                       type="button"
                       className="secondary"
-                      onClick={() => reserve(book.id)}
+                      onClick={() => toggleCopies(book.id)}
                     >
-                      Reserve
-                    </button>
+                      {copies[book.id] ? 'Hide copies' : 'Copies'}
+                    </button>{' '}
+                    {!isStaff && (
+                      <button
+                        type="button"
+                        className="secondary"
+                        onClick={() => reserve(book.id)}
+                      >
+                        Reserve
+                      </button>
+                    )}
                   </td>
+                </tr>
+                {copies[book.id] && (
+                  <tr key={`${book.id}-copies`}>
+                    <td colSpan={5}>
+                      {copies[book.id].length === 0 ? (
+                        <span className="muted">No copies yet.</span>
+                      ) : (
+                        copies[book.id].map((c) => (
+                          <span
+                            key={c.id}
+                            className={`badge ${c.status === 'available' ? 'ok' : ''}`}
+                            style={{ marginRight: 6 }}
+                          >
+                            {c.branch_name}: {c.barcode} ({c.status})
+                          </span>
+                        ))
+                      )}
+                    </td>
+                  </tr>
                 )}
-              </tr>
+              </Fragment>
             ))}
           </tbody>
         </table>
