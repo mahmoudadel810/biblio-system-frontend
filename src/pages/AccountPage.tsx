@@ -14,6 +14,19 @@ export default function AccountPage() {
   const [delPw, setDelPw] = useState('');
   const [confirmDel, setConfirmDel] = useState(false);
 
+  const [prefs, setPrefs] = useState<{ remind_enabled: boolean; remind_days: number } | null>(null);
+  useEffect(() => {
+    api.get<{ remind_enabled: boolean; remind_days: number }>('/me/preferences').then(setPrefs).catch(() => {});
+  }, []);
+  const savePrefs = async (patch: { remind_enabled?: boolean; remind_days?: number }) => {
+    setErr('');
+    try {
+      setPrefs(await api.patch<{ remind_enabled: boolean; remind_days: number }>('/me/preferences', patch));
+      setMsg(t('remind.saved'));
+    } catch (x) {
+      fail(x);
+    }
+  };
   const [card, setCard] = useState<{ code: string; full_name: string; expires_in: number } | null>(null);
   const [showCard, setShowCard] = useState(false);
   useEffect(() => {
@@ -101,6 +114,25 @@ export default function AccountPage() {
           {showCard ? t('card.hide') : t('card.show')}
         </button>
       </section>
+
+      {prefs && (
+        <section className="panel">
+          <h2>{t('remind.title')}</h2>
+          <p className="muted">{t('remind.hint')}</p>
+          <label className="check-row">
+            <input type="checkbox" checked={prefs.remind_enabled} onChange={(e) => savePrefs({ remind_enabled: e.target.checked })} />
+            {t('remind.enabled')}
+          </label>
+          <label>{t('remind.days')}
+            <select value={prefs.remind_days} disabled={!prefs.remind_enabled} onChange={(e) => savePrefs({ remind_days: Number(e.target.value) })}>
+              {[1, 2, 3, 5, 7].map((d) => (
+                <option key={d} value={d}>{d}</option>
+              ))}
+            </select>
+          </label>
+          <p className="muted">{t('remind.overdueNote')}</p>
+        </section>
+      )}
 
       <section className="panel">
         <h2>{t('account.password')}</h2>

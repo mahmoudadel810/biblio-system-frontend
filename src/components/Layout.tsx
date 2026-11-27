@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { api } from '../api/client';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useI18n } from '../i18n';
@@ -15,12 +17,19 @@ export default function Layout() {
   const { t, lang, setLang } = useI18n();
   const [cal, toggleCal] = useCalendar();
   const unread = useUnread(!!user);
+  // Keep the saved language in step with the toggle so reminders arrive in the member's language.
+  useEffect(() => {
+    if (!user) return;
+    const key = `biblio.lang.synced.${user.id ?? ''}`;
+    if (sessionStorage.getItem(key) === lang) return;
+    api.patch('/me/preferences', { lang }).then(() => sessionStorage.setItem(key, lang)).catch(() => {});
+  }, [user, lang]);
   const { canInstall, install } = useInstall();
   const badge = unread > 0 ? <span className="nav-badge" aria-label={`${unread}`}>{unread > 99 ? '99+' : unread}</span> : null;
 
   const titleKeys: Record<string, string> = {
     '/app': isStaff ? 'staff.nav.dashboard' : 'reader.mylib', '/catalog': 'staff.nav.catalog', '/notifications': 'reader.notes',
-    '/loans': 'staff.nav.loans', '/desk': 'staff.nav.desk', '/members': 'staff.nav.members', '/transfers': 'staff.nav.transfers',
+    '/loans': 'staff.nav.loans', '/desk': 'staff.nav.desk', '/labels': 'staff.nav.labels', '/members': 'staff.nav.members', '/transfers': 'staff.nav.transfers',
     '/procurement': 'staff.nav.procurement', '/inventory': 'staff.nav.inventory', '/import': 'staff.nav.import',
     '/payments': 'staff.nav.payments', '/reports': 'staff.nav.reports', '/settings': 'staff.nav.settings',
     '/organizations': 'staff.nav.orgs', '/audit': 'staff.nav.audit', '/account': 'nav.account',
@@ -68,6 +77,7 @@ export default function Layout() {
           <NavLink to="/catalog">{t('staff.nav.catalog')}</NavLink>
           <NavLink to="/notifications">{t('reader.notes')}{badge}</NavLink>
           {isStaff && <NavLink to="/desk">{t('staff.nav.desk')}</NavLink>}
+          {isStaff && <NavLink to="/labels">{t('staff.nav.labels')}</NavLink>}
           {isStaff && <NavLink to="/loans">{t('staff.nav.loans')}</NavLink>}
           {isStaff && <NavLink to="/members">{t('staff.nav.members')}</NavLink>}
           {isStaff && <NavLink to="/transfers">{t('staff.nav.transfers')}</NavLink>}
