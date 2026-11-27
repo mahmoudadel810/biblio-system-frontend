@@ -7,6 +7,7 @@ import { reason } from '../public/BorrowDialog';
 
 interface MyLoan { id: string; book_slug: string | null; title: string; title_ar: string | null; due_at: string; returned_at: string | null; renewals_left: number; overdue: boolean }
 interface MyHold { id: string; book_slug: string | null; title: string; title_ar: string | null; status: string; expires_at: string; queue_position: number }
+interface DLoan { id: string; book_slug: string | null; book_title: string; days_left: number }
 interface Fine { id: string; amount: number; reason: string; status: string }
 
 // The member's own loans, holds and fines, with the reason shown when an action is blocked.
@@ -14,12 +15,14 @@ export default function MyLibrary() {
   const { t, lang } = useI18n();
   const [loans, setLoans] = useState<MyLoan[]>([]);
   const [holds, setHolds] = useState<MyHold[]>([]);
+  const [dl, setDl] = useState<DLoan[]>([]);
   const [fines, setFines] = useState<Fine[]>([]);
   const [notes, setNotes] = useState<Record<string, string>>({});
 
   const load = useCallback(() => {
     api.get<MyLoan[]>('/me/loans').then(setLoans).catch(() => {});
     api.get<MyHold[]>('/me/holds').then(setHolds).catch(() => {});
+    api.get<DLoan[]>('/me/digital-loans').then(setDl).catch(() => {});
     api.get<Fine[]>('/fines?status=unpaid').then(setFines).catch(() => {});
   }, []);
   useEffect(load, [load]);
@@ -46,6 +49,20 @@ export default function MyLibrary() {
                 {notes[l.id] && <div className="error small" role="alert">{notes[l.id]}</div>}
               </div>
               <button type="button" className="pill ghost" onClick={() => renew(l.id)}>{t('my.renew')} <bdi>({l.renewals_left})</bdi></button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <h2>{t('my.digital')}</h2>
+      {dl.length === 0 ? <p className="muted">{t('my.nodigital')}</p> : (
+        <ul className="mylist">
+          {dl.map((d) => (
+            <li key={d.id}>
+              <div>
+                {d.book_slug ? <Link to={`/books/${d.book_slug}`}><bdi>{d.book_title}</bdi></Link> : <bdi>{d.book_title}</bdi>}
+                <div className="muted small">{t('my.daysleft').replace('{n}', String(d.days_left))}</div>
+              </div>
+              {d.book_slug && <Link className="pill ghost" to={`/read/${d.book_slug}`}>{t('my.read')}</Link>}
             </li>
           ))}
         </ul>
