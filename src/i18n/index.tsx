@@ -13,6 +13,8 @@ const Ctx = createContext<{ lang: Lang; setLang: (l: Lang) => void; t: (k: strin
 });
 
 function initial(): Lang {
+  const q = new URLSearchParams(window.location.search).get('lang');
+  if (q === 'ar' || q === 'en') return q;
   const saved = localStorage.getItem('biblio.lang');
   if (saved === 'ar' || saved === 'en') return saved;
   return navigator.language.toLowerCase().startsWith('ar') ? 'ar' : 'en';

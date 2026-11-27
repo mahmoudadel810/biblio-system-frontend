@@ -1,4 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import PublicLayout from './public/PublicLayout';
+import HomePage from './public/HomePage';
+import BooksPage from './public/BooksPage';
+import BookPage from './public/BookPage';
+import { AuthorsPage, AuthorPage } from './public/AuthorsPage';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuditPage from './pages/AuditPage';
@@ -19,6 +24,13 @@ import TransfersPage from './pages/TransfersPage';
 export default function App() {
   return (
     <Routes>
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/books" element={<BooksPage />} />
+        <Route path="/books/:slug" element={<BookPage />} />
+        <Route path="/authors" element={<AuthorsPage />} />
+        <Route path="/authors/:slug" element={<AuthorPage />} />
+      </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route
@@ -28,7 +40,7 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/app" element={<DashboardPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route
