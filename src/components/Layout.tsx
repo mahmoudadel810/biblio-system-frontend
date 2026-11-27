@@ -57,6 +57,7 @@ export default function Layout() {
           {isStaff && <NavLink to="/transfers">{t('staff.nav.transfers')}</NavLink>}
           {isStaff && <NavLink to="/procurement">{t('staff.nav.procurement')}</NavLink>}
           {isStaff && <NavLink to="/inventory">{t('staff.nav.inventory')}</NavLink>}
+          {isStaff && <NavLink to="/import">{t('staff.nav.import')}</NavLink>}
           {isStaff && <NavLink to="/payments">{t('staff.nav.payments')}</NavLink>}
           {isStaff && <NavLink to="/reports">{t('staff.nav.reports')}</NavLink>}
           {isAdmin && <NavLink to="/settings">{t('staff.nav.settings')}</NavLink>}
