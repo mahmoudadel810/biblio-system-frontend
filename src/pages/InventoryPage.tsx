@@ -6,7 +6,8 @@ import { api, ApiError } from '../api/client';
 import type { Adjustment, Branch, StockLevel } from '../api/types';
 
 export default function InventoryPage() {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
+  const st = (v: string) => { const r = t(`copy.s.${v}`); return r === `copy.s.${v}` ? v : r; };
   useCalendar();
   const [stock, setStock] = useState<StockLevel[]>([]);
   const [adjustments, setAdjustments] = useState<Adjustment[]>([]);
@@ -52,23 +53,23 @@ export default function InventoryPage() {
         reason: form.reason,
       });
       setForm({ copyId: '', toStatus: 'lost', reason: '' });
-      setMessage('Adjustment recorded.');
+      setMessage(t('inv.saved'));
       load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'adjustment failed');
+      setError(err instanceof ApiError ? err.message : t('inv.failed'));
     }
   };
 
   return (
     <>
       <div className="panel">
-        <h2>Stock levels</h2>
+        <h2>{t('inv.stock')}</h2>
         <form className="inline-form" onSubmit={(e) => e.preventDefault()}>
           <select
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
           >
-            <option value="">All branches</option>
+            <option value="">{t('inv.allBranches')}</option>
             {branches.map((b) => (
               <option key={b.id} value={b.id}>
                 {b.name}
@@ -79,16 +80,16 @@ export default function InventoryPage() {
         <table>
           <thead>
             <tr>
-              <th>Branch</th>
-              <th>Status</th>
-              <th>Copies</th>
+              <th>{t('inv.branch')}</th>
+              <th>{t('common.status')}</th>
+              <th>{t('inv.copies')}</th>
             </tr>
           </thead>
           <tbody>
             {stock.map((row) => (
               <tr key={`${row.branch_id}-${row.status}`}>
                 <td>{branchName(row.branch_id)}</td>
-                <td>{row.status}</td>
+                <td>{st(row.status)}</td>
                 <td>{row.copies}</td>
               </tr>
             ))}
@@ -97,10 +98,10 @@ export default function InventoryPage() {
       </div>
 
       <div className="panel">
-        <h2>Record an adjustment</h2>
+        <h2>{t('inv.record')}</h2>
         <form className="inline-form" onSubmit={submit}>
           <input
-            placeholder="Copy ID"
+            placeholder={t('inv.copyId')}
             value={form.copyId}
             onChange={(e) => setForm({ ...form, copyId: e.target.value })}
             required
@@ -109,32 +110,32 @@ export default function InventoryPage() {
             value={form.toStatus}
             onChange={(e) => setForm({ ...form, toStatus: e.target.value })}
           >
-            <option value="available">available</option>
-            <option value="lost">lost</option>
-            <option value="maintenance">maintenance</option>
+            <option value="available">{st('available')}</option>
+            <option value="lost">{st('lost')}</option>
+            <option value="maintenance">{st('maintenance')}</option>
           </select>
           <input
-            placeholder="Reason"
+            placeholder={t('inv.reason')}
             value={form.reason}
             onChange={(e) => setForm({ ...form, reason: e.target.value })}
             required
           />
-          <button type="submit">Record</button>
+          <button type="submit">{t('inv.recordBtn')}</button>
         </form>
         {message && <p>{message}</p>}
         {error && <p className="error-text">{error}</p>}
       </div>
 
       <div className="panel">
-        <h2>Adjustment history</h2>
+        <h2>{t('inv.history')}</h2>
         <table>
           <thead>
             <tr>
-              <th>When</th>
-              <th>Copy</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Reason</th>
+              <th>{t('pay.when')}</th>
+              <th>{t('inv.copy')}</th>
+              <th>{t('inv.from')}</th>
+              <th>{t('inv.to')}</th>
+              <th>{t('inv.reason')}</th>
             </tr>
           </thead>
           <tbody>
@@ -142,8 +143,8 @@ export default function InventoryPage() {
               <tr key={a.id}>
                 <td>{fmtDateTime(a.created_at, lang)}</td>
                 <td className="muted">{a.copy_id}</td>
-                <td>{a.from_status}</td>
-                <td>{a.to_status}</td>
+                <td>{st(a.from_status)}</td>
+                <td>{st(a.to_status)}</td>
                 <td>{a.reason}</td>
               </tr>
             ))}

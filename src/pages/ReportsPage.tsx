@@ -12,7 +12,7 @@ import type {
 } from '../api/types';
 
 export default function ReportsPage() {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   useCalendar();
   const [overview, setOverview] = useState<Overview | null>(null);
   const [popular, setPopular] = useState<PopularBook[]>([]);
@@ -40,44 +40,44 @@ export default function ReportsPage() {
         <div className="stat-grid">
           <div className="stat-card">
             <div className="value">{overview.books}</div>
-            <div className="label">Books</div>
+            <div className="label">{t('rep.books')}</div>
           </div>
           <div className="stat-card">
             <div className="value">{overview.copies}</div>
-            <div className="label">Copies</div>
+            <div className="label">{t('rep.copies')}</div>
           </div>
           <div className="stat-card">
             <div className="value">{overview.members}</div>
-            <div className="label">Members</div>
+            <div className="label">{t('rep.members')}</div>
           </div>
           <div className="stat-card">
             <div className="value">{overview.active_loans}</div>
-            <div className="label">Active loans</div>
+            <div className="label">{t('rep.active')}</div>
           </div>
           <div className="stat-card">
             <div className="value">{overview.overdue_loans}</div>
-            <div className="label">Overdue</div>
+            <div className="label">{t('rep.overdue')}</div>
           </div>
           <div className="stat-card">
             <div className="value">{overview.active_reservations}</div>
-            <div className="label">Reservations</div>
+            <div className="label">{t('rep.res')}</div>
           </div>
           <div className="stat-card">
             <div className="value">{overview.unpaid_fines_total.toFixed(2)}</div>
-            <div className="label">Unpaid fines</div>
+            <div className="label">{t('rep.unpaid')}</div>
           </div>
         </div>
       )}
 
       <div className="panel">
-        <h2>Popular books</h2>
+        <h2>{t('rep.popular')}</h2>
         <table>
           <thead>
             <tr>
-              <th>Title</th>
-              <th>ISBN</th>
-              <th>Loans</th>
-              <th>Active reservations</th>
+              <th>{t('rep.title')}</th>
+              <th>{t('rep.isbn')}</th>
+              <th>{t('rep.loans')}</th>
+              <th>{t('rep.activeRes')}</th>
             </tr>
           </thead>
           <tbody>
@@ -94,18 +94,18 @@ export default function ReportsPage() {
       </div>
 
       <div className="panel">
-        <h2>Overdue loans</h2>
+        <h2>{t('rep.overdueTitle')}</h2>
         {overdue.length === 0 ? (
-          <p className="muted">Nothing overdue.</p>
+          <p className="muted">{t('rep.nothing')}</p>
         ) : (
           <table>
             <thead>
               <tr>
-                <th>Member</th>
-                <th>Book</th>
-                <th>Barcode</th>
-                <th>Due</th>
-                <th>Days late</th>
+                <th>{t('rep.member')}</th>
+                <th>{t('rep.book')}</th>
+                <th>{t('rep.barcode')}</th>
+                <th>{t('rep.due')}</th>
+                <th>{t('rep.late')}</th>
               </tr>
             </thead>
             <tbody>
@@ -129,28 +129,28 @@ export default function ReportsPage() {
 
       {fines && (
         <div className="panel">
-          <h2>Fines</h2>
+          <h2>{t('rep.fines')}</h2>
           <table>
             <thead>
               <tr>
                 <th></th>
-                <th>Count</th>
-                <th>Total</th>
+                <th>{t('rep.count')}</th>
+                <th>{t('rep.total')}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Unpaid</td>
+                <td>{t('rep.fUnpaid')}</td>
                 <td>{fines.unpaid_count}</td>
                 <td>{fines.unpaid_total.toFixed(2)}</td>
               </tr>
               <tr>
-                <td>Paid</td>
+                <td>{t('rep.fPaid')}</td>
                 <td>{fines.paid_count}</td>
                 <td>{fines.paid_total.toFixed(2)}</td>
               </tr>
               <tr>
-                <td>Waived</td>
+                <td>{t('rep.fWaived')}</td>
                 <td>{fines.waived_count}</td>
                 <td>{fines.waived_total.toFixed(2)}</td>
               </tr>
@@ -160,14 +160,14 @@ export default function ReportsPage() {
       )}
 
       <div className="panel">
-        <h2>Circulation, last 14 days</h2>
+        <h2>{t('rep.circ')}</h2>
         <table>
           <thead>
             <tr>
-              <th>Day</th>
-              <th>Loans</th>
-              <th>Returns</th>
-              <th>Renewals</th>
+              <th>{t('rep.day')}</th>
+              <th>{t('rep.loans')}</th>
+              <th>{t('rep.returns')}</th>
+              <th>{t('rep.renewals')}</th>
             </tr>
           </thead>
           <tbody>

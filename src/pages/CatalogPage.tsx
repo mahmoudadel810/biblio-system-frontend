@@ -2,9 +2,12 @@ import { Fragment, useCallback, useEffect, useState, type FormEvent } from 'reac
 import { api, ApiError } from '../api/client';
 import type { Book, Branch, Copy } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
+import { useI18n } from '../i18n';
 
 export default function CatalogPage() {
   const { user } = useAuth();
+  const { t } = useI18n();
+  const st = (v: string) => { const r = t(`copy.s.${v}`); return r === `copy.s.${v}` ? v : r; };
   const isStaff = user?.role === 'librarian' || user?.role === 'admin';
   const [query, setQuery] = useState('');
   const [books, setBooks] = useState<Book[]>([]);
@@ -66,9 +69,9 @@ export default function CatalogPage() {
         member_id: user.id,
         branch_id: reserveBranch,
       });
-      setMessage('Reservation placed.');
+      setMessage(t('cat.reserved'));
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'reservation failed');
+      setError(err instanceof ApiError ? err.message : t('cat.resFail'));
     }
   };
 
@@ -85,25 +88,25 @@ export default function CatalogPage() {
       setNewBook({ isbn: '', title: '', publisher: '' });
       load(query.trim());
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'could not add book');
+      setError(err instanceof ApiError ? err.message : t('cat.addFail'));
     }
   };
 
   return (
     <>
       <div className="panel">
-        <h2>Catalog</h2>
+        <h2>{t('cat.title')}</h2>
         <form className="inline-form" onSubmit={onSearch}>
           <input
-            placeholder="Search by title or ISBN"
+            placeholder={t('cat.search')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <button type="submit">Search</button>
+          <button type="submit">{t('cat.searchBtn')}</button>
         </form>
         {!isStaff && branches.length > 0 && (
           <p className="muted">
-            Reserve at branch:{' '}
+            {t('cat.reserveAt')}{' '}
             <select
               value={reserveBranch}
               onChange={(e) => setReserveBranch(e.target.value)}
@@ -121,10 +124,10 @@ export default function CatalogPage() {
         <table>
           <thead>
             <tr>
-              <th>Title</th>
-              <th>ISBN</th>
-              <th>Publisher</th>
-              <th>Year</th>
+              <th>{t('rep.title')}</th>
+              <th>{t('rep.isbn')}</th>
+              <th>{t('cat.publisher')}</th>
+              <th>{t('cat.year')}</th>
               <th></th>
             </tr>
           </thead>
@@ -142,7 +145,7 @@ export default function CatalogPage() {
                       className="secondary"
                       onClick={() => toggleCopies(book.id)}
                     >
-                      {copies[book.id] ? 'Hide copies' : 'Copies'}
+                      {copies[book.id] ? t('cat.hide') : t('cat.copies')}
                     </button>{' '}
                     {!isStaff && (
                       <button
@@ -150,7 +153,7 @@ export default function CatalogPage() {
                         className="secondary"
                         onClick={() => reserve(book.id)}
                       >
-                        Reserve
+                        {t('cat.reserve')}
                       </button>
                     )}
                   </td>
@@ -159,7 +162,7 @@ export default function CatalogPage() {
                   <tr key={`${book.id}-copies`}>
                     <td colSpan={5}>
                       {copies[book.id].length === 0 ? (
-                        <span className="muted">No copies yet.</span>
+                        <span className="muted">{t('cat.noCopies')}</span>
                       ) : (
                         copies[book.id].map((c) => (
                           <span
@@ -167,7 +170,7 @@ export default function CatalogPage() {
                             className={`badge ${c.status === 'available' ? 'ok' : ''}`}
                             style={{ marginRight: 6 }}
                           >
-                            {c.branch_name}: {c.barcode} ({c.status})
+                            {c.branch_name}: {c.barcode} ({st(c.status)})
                           </span>
                         ))
                       )}
@@ -182,17 +185,17 @@ export default function CatalogPage() {
 
       {isStaff && (
         <div className="panel">
-          <h2>Add a book</h2>
+          <h2>{t('cat.add')}</h2>
           <form className="inline-form" onSubmit={addBook}>
             <input
-              placeholder="ISBN"
+              placeholder={t('rep.isbn')}
               value={newBook.isbn}
               onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
               required
               minLength={10}
             />
             <input
-              placeholder="Title"
+              placeholder={t('rep.title')}
               value={newBook.title}
               onChange={(e) =>
                 setNewBook({ ...newBook, title: e.target.value })
@@ -200,13 +203,13 @@ export default function CatalogPage() {
               required
             />
             <input
-              placeholder="Publisher (optional)"
+              placeholder={t('cat.pub')}
               value={newBook.publisher}
               onChange={(e) =>
                 setNewBook({ ...newBook, publisher: e.target.value })
               }
             />
-            <button type="submit">Add</button>
+            <button type="submit">{t('cat.addBtn')}</button>
           </form>
         </div>
       )}
