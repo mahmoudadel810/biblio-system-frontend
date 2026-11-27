@@ -56,6 +56,8 @@ export function Cover({
       src={src}
       alt={decorative ? '' : `${t('cover.alt')} ${book.title}`}
       loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      {...(eager ? { fetchPriority: 'high' as const } : {})}
       width={200}
       height={300}
       onError={() => setFailed(true)}
