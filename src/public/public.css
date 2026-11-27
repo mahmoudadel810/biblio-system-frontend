@@ -121,3 +121,16 @@ blockquote { margin: var(--s-4) 0; padding-inline-start: var(--s-4); border-inli
 .mascot { width: 120px; height: auto; margin-top: var(--s-6); --mx: 0px; --my: 0px; }
 .mascot .pupil { transform: translate(var(--mx), var(--my)); transition: transform 120ms var(--ease); }
 @media (prefers-reduced-motion: reduce) { .mascot .pupil { transition: none; } }
+
+/* reviews and lists */
+.stars { display: inline-flex; gap: 2px; color: var(--muted, #8a8a8a); }
+.star.on { color: var(--accent, #b45309); }
+.review { padding-block: var(--s-3); border-block-end: 1px solid var(--line, #e5e5e5); }
+.rev-form label { display: block; margin-block: var(--s-3); }
+.rev-form textarea { display: block; width: 100%; box-sizing: border-box; }
+.rev-pick { display: flex; gap: var(--s-1); }
+.star-btn { min-width: 44px; min-height: 44px; font-size: 1.5rem; background: none; border: 1px solid var(--line, #e5e5e5); border-radius: 8px; color: var(--muted, #8a8a8a); cursor: pointer; }
+.star-btn.on { color: var(--accent, #b45309); border-color: var(--accent, #b45309); }
+.addlist-box { margin-block: var(--s-3); }
+.check-row { display: flex; align-items: center; gap: var(--s-2); min-height: 44px; }
+.rev-form textarea, .addlist-box input { font: inherit; padding: var(--s-2); }
