@@ -17,9 +17,9 @@ export default function PublicLayout() {
   return (
     <>
       <a className="skip" href="#main">{t('skip')}</a>
-      <div className="partner-line">
+      <aside className="partner-line" aria-label={t('nav.partner')}>
         <Link to="/library/start">{t('nav.partner')}</Link>
-      </div>
+      </aside>
       <header className="pub-head">
         <Link to="/" aria-label="Biblio"><Logo lang={lang} /></Link>
         <nav className="pub-nav" aria-label={t('nav.main')}>

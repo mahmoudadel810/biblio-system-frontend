@@ -45,7 +45,7 @@ export default function NotificationsPage() {
               <th>{t('col.when')}</th>
               <th>{t('col.title')}</th>
               <th>{t('col.message')}</th>
-              <th></th>
+              <th><span className="sr-only">{t('col.actions')}</span></th>
             </tr>
           </thead>
           <tbody>

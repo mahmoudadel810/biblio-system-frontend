@@ -493,4 +493,8 @@ export const en: Record<string, string> = {
   'auth.google.exchange': "Google did not confirm the sign-in. Please try again.",
   'auth.google.unverified': "Your Google email is not verified, so it cannot be used here.",
   'auth.google.disabled': "This account is disabled. Contact the library.",
+  'po.pickBook': "Find a book by title or ISBN",
+  'po.qty': "Quantity",
+  'po.unitCost': "Unit cost (SAR)",
+  'col.actions': "Actions",
 };

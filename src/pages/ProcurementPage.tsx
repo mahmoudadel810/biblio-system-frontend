@@ -9,6 +9,9 @@ import type {
   Supplier,
 } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
+import Picker, { type PickItem } from '../components/Picker';
+import { findBooks } from '../components/lookups';
+
 
 export default function ProcurementPage() {
   const { lang, t } = useI18n();
@@ -18,6 +21,7 @@ export default function ProcurementPage() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [orders, setOrders] = useState<PurchaseOrderWithItems[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
+  const [bookPick, setBookPick] = useState<PickItem | null>(null);
   const [supplierForm, setSupplierForm] = useState({ name: '', email: '' });
   const [orderForm, setOrderForm] = useState({
     supplierId: '',
@@ -86,6 +90,7 @@ export default function ProcurementPage() {
       });
       setMessage(t('po.created'));
       setOrderForm({ ...orderForm, bookId: '', quantity: 1, unitCost: '0.00' });
+      setBookPick(null);
       load();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t('po.createFail'));
@@ -155,6 +160,7 @@ export default function ProcurementPage() {
         <h2>{t('po.new')}</h2>
         <form className="inline-form" onSubmit={addOrder}>
           <select
+            aria-label={t('po.supplier')}
             value={orderForm.supplierId}
             onChange={(e) =>
               setOrderForm({ ...orderForm, supplierId: e.target.value })
@@ -171,6 +177,7 @@ export default function ProcurementPage() {
               ))}
           </select>
           <select
+            aria-label={t('po.branch')}
             value={orderForm.branchId}
             onChange={(e) =>
               setOrderForm({ ...orderForm, branchId: e.target.value })
@@ -186,16 +193,16 @@ export default function ProcurementPage() {
                 </option>
               ))}
           </select>
-          <input
-            placeholder={t('po.bookId')}
-            value={orderForm.bookId}
-            onChange={(e) =>
-              setOrderForm({ ...orderForm, bookId: e.target.value })
-            }
+          <Picker
+            placeholder={t('po.pickBook')}
+            search={findBooks}
+            value={bookPick}
+            onChange={(it) => { setBookPick(it); setOrderForm({ ...orderForm, bookId: it?.id ?? '' }); }}
             required
           />
           <input
             type="number"
+            aria-label={t('po.qty')}
             min={1}
             value={orderForm.quantity}
             onChange={(e) =>
@@ -205,6 +212,7 @@ export default function ProcurementPage() {
           />
           <input
             type="number"
+            aria-label={t('po.unitCost')}
             min={0}
             step="0.01"
             value={orderForm.unitCost}
@@ -226,7 +234,7 @@ export default function ProcurementPage() {
               <th>{t('po.items')}</th>
               <th>{t('common.status')}</th>
               <th>{t('po.created2')}</th>
-              <th></th>
+              <th><span className="sr-only">{t('col.actions')}</span></th>
             </tr>
           </thead>
           <tbody>

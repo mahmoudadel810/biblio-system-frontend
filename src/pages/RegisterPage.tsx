@@ -33,7 +33,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="auth-card">
+    <main className="auth-card">
       <AuthLang />
       <h1>{t('auth.regTitle')}</h1>
       <GoogleButton />
@@ -67,6 +67,6 @@ export default function RegisterPage() {
       <p className="muted">
         {t('auth.haveAccount')} <Link to={`/login${location.search}`}>{t('auth.signin')}</Link>
       </p>
-    </div>
+    </main>
   );
 }

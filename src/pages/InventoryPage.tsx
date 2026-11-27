@@ -4,6 +4,9 @@ import { fmtDateTime } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type { Adjustment, Branch, StockLevel } from '../api/types';
+import Picker, { type PickItem } from '../components/Picker';
+import { findCopies } from '../components/lookups';
+
 
 export default function InventoryPage() {
   const { lang, t } = useI18n();
@@ -14,6 +17,7 @@ export default function InventoryPage() {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [branchFilter, setBranchFilter] = useState('');
   const [form, setForm] = useState({ copyId: '', toStatus: 'lost', reason: '' });
+  const [copyPick, setCopyPick] = useState<PickItem | null>(null);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
@@ -53,6 +57,7 @@ export default function InventoryPage() {
         reason: form.reason,
       });
       setForm({ copyId: '', toStatus: 'lost', reason: '' });
+      setCopyPick(null);
       setMessage(t('inv.saved'));
       load();
     } catch (err) {
@@ -66,6 +71,7 @@ export default function InventoryPage() {
         <h2>{t('inv.stock')}</h2>
         <form className="inline-form" onSubmit={(e) => e.preventDefault()}>
           <select
+            aria-label={t('inv.allBranches')}
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
           >
@@ -100,13 +106,15 @@ export default function InventoryPage() {
       <div className="panel">
         <h2>{t('inv.record')}</h2>
         <form className="inline-form" onSubmit={submit}>
-          <input
-            placeholder={t('inv.copyId')}
-            value={form.copyId}
-            onChange={(e) => setForm({ ...form, copyId: e.target.value })}
+          <Picker
+            placeholder={t('loans.pickCopy')}
+            search={findCopies}
+            value={copyPick}
+            onChange={(it) => { setCopyPick(it); setForm({ ...form, copyId: it?.id ?? '' }); }}
             required
           />
           <select
+            aria-label={t('inv.to')}
             value={form.toStatus}
             onChange={(e) => setForm({ ...form, toStatus: e.target.value })}
           >

@@ -23,7 +23,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="auth-card">
+    <main className="auth-card">
       <AuthLang />
       <h1>{t('auth.resetTitle')}</h1>
       {done ? (
@@ -39,6 +39,6 @@ export default function ResetPasswordPage() {
         </form>
       )}
       <p className="muted">{done ? <Link to="/login">{t('auth.signin')}</Link> : <Link to="/forgot-password">{t('auth.forgot')}</Link>}</p>
-    </div>
+    </main>
   );
 }

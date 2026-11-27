@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useI18n } from '../i18n';
 import Logo from './Logo';
@@ -9,6 +9,7 @@ import { useInstall } from './useInstall';
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const isStaff = user?.role === 'librarian' || user?.role === 'admin';
   const isAdmin = user?.role === 'admin';
   const { t, lang, setLang } = useI18n();
@@ -16,6 +17,15 @@ export default function Layout() {
   const unread = useUnread(!!user);
   const { canInstall, install } = useInstall();
   const badge = unread > 0 ? <span className="nav-badge" aria-label={`${unread}`}>{unread > 99 ? '99+' : unread}</span> : null;
+
+  const titleKeys: Record<string, string> = {
+    '/app': isStaff ? 'staff.nav.dashboard' : 'reader.mylib', '/catalog': 'staff.nav.catalog', '/notifications': 'reader.notes',
+    '/loans': 'staff.nav.loans', '/members': 'staff.nav.members', '/transfers': 'staff.nav.transfers',
+    '/procurement': 'staff.nav.procurement', '/inventory': 'staff.nav.inventory', '/import': 'staff.nav.import',
+    '/payments': 'staff.nav.payments', '/reports': 'staff.nav.reports', '/settings': 'staff.nav.settings',
+    '/organizations': 'staff.nav.orgs', '/audit': 'staff.nav.audit', '/account': 'nav.account',
+  };
+  const pageH1 = <h1 className="sr-only">{titleKeys[pathname] ? t(titleKeys[pathname]) : 'Biblio'}</h1>;
 
   const onLogout = async () => {
     await logout();
@@ -42,6 +52,7 @@ export default function Layout() {
           </div>
         </header>
         <main className="reader-content">
+          {pageH1}
           <Outlet />
         </main>
       </div>
@@ -80,6 +91,7 @@ export default function Layout() {
         </div>
       </header>
       <main className="content">
+        {pageH1}
         <Outlet />
       </main>
     </div>

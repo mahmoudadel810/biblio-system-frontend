@@ -122,7 +122,7 @@ export default function LoansPage() {
               <th>{t('col.borrowed')}</th>
               <th>{t('col.due')}</th>
               <th>{t('col.renewals')}</th>
-              <th></th>
+              <th><span className="sr-only">{t('col.actions')}</span></th>
             </tr>
           </thead>
           <tbody>
@@ -188,7 +188,7 @@ export default function LoansPage() {
                 <th>{t('col.member')}</th>
                 <th>{t('col.amount')}</th>
                 <th>{t('col.reason')}</th>
-                <th></th>
+                <th><span className="sr-only">{t('col.actions')}</span></th>
               </tr>
             </thead>
             <tbody>

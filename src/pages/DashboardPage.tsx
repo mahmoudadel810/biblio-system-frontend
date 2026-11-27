@@ -1,3 +1,4 @@
+import { fmtMoney } from '../public/format';
 import { useEffect, useState } from 'react';
 import { api } from '../api/client';
 import type { Dashboard } from '../api/types';
@@ -5,7 +6,7 @@ import MyLibrary from './MyLibrary';
 import { useI18n } from '../i18n';
 
 export default function DashboardPage() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [data, setData] = useState<Dashboard | null>(null);
   const [error, setError] = useState('');
 
@@ -31,7 +32,7 @@ export default function DashboardPage() {
           <div className="label">{t('dash.stat.res')}</div>
         </div>
         <div className="stat-card">
-          <div className="value">{data.unpaid_fines_total.toFixed(2)}</div>
+          <div className="value">{fmtMoney(data.unpaid_fines_total, lang)}</div>
           <div className="label">{t('dash.stat.fines')}</div>
         </div>
         <div className="stat-card">

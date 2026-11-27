@@ -4,6 +4,9 @@ import { fmtDate } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type { Branch, Transfer } from '../api/types';
+import Picker, { type PickItem } from '../components/Picker';
+import { findCopies } from '../components/lookups';
+
 
 export default function TransfersPage() {
   const { lang, t } = useI18n();
@@ -11,6 +14,7 @@ export default function TransfersPage() {
   const [transfers, setTransfers] = useState<Transfer[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
   const [form, setForm] = useState({ copyId: '', toBranchId: '' });
+  const [copyPick, setCopyPick] = useState<PickItem | null>(null);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
@@ -40,6 +44,7 @@ export default function TransfersPage() {
         to_branch_id: form.toBranchId,
       });
       setForm({ copyId: '', toBranchId: '' });
+      setCopyPick(null);
       setMessage(t('tr.requested'));
       load();
     } catch (err) {
@@ -64,13 +69,15 @@ export default function TransfersPage() {
       <div className="panel">
         <h2>{t('tr.req')}</h2>
         <form className="inline-form" onSubmit={request}>
-          <input
-            placeholder={t('tr.copyId')}
-            value={form.copyId}
-            onChange={(e) => setForm({ ...form, copyId: e.target.value })}
+          <Picker
+            placeholder={t('loans.pickCopy')}
+            search={findCopies}
+            value={copyPick}
+            onChange={(it) => { setCopyPick(it); setForm({ ...form, copyId: it?.id ?? '' }); }}
             required
           />
           <select
+            aria-label={t('tr.dest')}
             value={form.toBranchId}
             onChange={(e) => setForm({ ...form, toBranchId: e.target.value })}
             required
@@ -100,7 +107,7 @@ export default function TransfersPage() {
               <th>{t('tr.to')}</th>
               <th>{t('common.status')}</th>
               <th>{t('tr.reqAt')}</th>
-              <th></th>
+              <th><span className="sr-only">{t('col.actions')}</span></th>
             </tr>
           </thead>
           <tbody>
