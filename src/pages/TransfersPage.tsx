@@ -106,7 +106,7 @@ export default function TransfersPage() {
           <tbody>
             {transfers.map((x) => (
               <tr key={x.id}>
-                <td className="muted">{x.copy_id}</td>
+                <td>{x.copy_label ?? t('common.unknown')}</td>
                 <td>{branchName(x.from_branch_id)}</td>
                 <td>{branchName(x.to_branch_id)}</td>
                 <td>

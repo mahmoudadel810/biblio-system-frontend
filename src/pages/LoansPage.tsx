@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useI18n } from '../i18n';
-import { fmtDate } from '../public/format';
+import { fmtDate, fmtMoney, fineReason } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
-import type { Fine, Loan } from '../api/types';
+import type { Fine, Loan, Member } from '../api/types';
+import Picker, { type PickItem } from '../components/Picker';
 
 // Staff desk: borrow by copy barcode, return and renew loans, and collect
 // fine payments through the fines endpoint.
@@ -12,8 +13,28 @@ export default function LoansPage() {
   useCalendar();
   const [loans, setLoans] = useState<Loan[]>([]);
   const [fines, setFines] = useState<Fine[]>([]);
-  const [memberFilter, setMemberFilter] = useState('');
-  const [borrowForm, setBorrowForm] = useState({ copyId: '', memberId: '' });
+  const [copy, setCopy] = useState<PickItem | null>(null);
+  const [who, setWho] = useState<PickItem | null>(null);
+  const [filterWho, setFilterWho] = useState<PickItem | null>(null);
+  const memberFilter = filterWho?.id ?? '';
+  const findMembers = useCallback(
+    (q: string) =>
+      api.get<Member[]>(`/members?q=${encodeURIComponent(q)}`).then((r) =>
+        r.map((m) => ({ id: m.id, title: m.full_name, sub: m.email })),
+      ),
+    [],
+  );
+  const findCopies = useCallback(
+    (q: string) =>
+      api
+        .get<{ id: string; barcode: string; status: string; book_title: string; branch_name: string }[]>(
+          `/copies/lookup?q=${encodeURIComponent(q)}`,
+        )
+        .then((r) =>
+          r.map((c) => ({ id: c.id, title: c.book_title, sub: `${c.barcode} · ${c.branch_name}` })),
+        ),
+    [],
+  );
   const [error, setError] = useState('');
   const [more, setMore] = useState(false);
   const PAGE = 100;
@@ -51,10 +72,11 @@ export default function LoansPage() {
     setMessage('');
     try {
       await api.post('/loans', {
-        copy_id: borrowForm.copyId,
-        member_id: borrowForm.memberId,
+        copy_id: copy?.id,
+        member_id: who?.id,
       });
-      setBorrowForm({ copyId: '', memberId: '' });
+      setCopy(null);
+      setWho(null);
       setMessage(t('loans.created'));
       load();
     } catch (err) {
@@ -79,23 +101,9 @@ export default function LoansPage() {
       <div className="panel">
         <h2>{t('loans.borrowTitle')}</h2>
         <form className="inline-form" onSubmit={borrow}>
-          <input
-            placeholder={t('loans.copyId')}
-            value={borrowForm.copyId}
-            onChange={(e) =>
-              setBorrowForm({ ...borrowForm, copyId: e.target.value })
-            }
-            required
-          />
-          <input
-            placeholder={t('loans.memberId')}
-            value={borrowForm.memberId}
-            onChange={(e) =>
-              setBorrowForm({ ...borrowForm, memberId: e.target.value })
-            }
-            required
-          />
-          <button type="submit">{t('loans.borrow')}</button>
+          <Picker placeholder={t('loans.pickCopy')} search={findCopies} value={copy} onChange={setCopy} required />
+          <Picker placeholder={t('loans.pickMember')} search={findMembers} value={who} onChange={setWho} required />
+          <button type="submit" disabled={!copy || !who}>{t('loans.borrow')}</button>
         </form>
         {message && <p>{message}</p>}
         {error && <p className="error-text">{error}</p>}
@@ -104,11 +112,7 @@ export default function LoansPage() {
       <div className="panel">
         <h2>{t('staff.nav.loans')}</h2>
         <form className="inline-form" onSubmit={(e) => e.preventDefault()}>
-          <input
-            placeholder={t('loans.filter')}
-            value={memberFilter}
-            onChange={(e) => setMemberFilter(e.target.value)}
-          />
+          <Picker placeholder={t('loans.filterMember')} search={findMembers} value={filterWho} onChange={setFilterWho} />
         </form>
         <table>
           <thead>
@@ -124,8 +128,14 @@ export default function LoansPage() {
           <tbody>
             {loans.map((loan) => (
               <tr key={loan.id}>
-                <td className="muted">{loan.copy_id}</td>
-                <td className="muted">{loan.member_id}</td>
+                <td>
+                  {loan.book_title ?? t('common.unknown')}
+                  {loan.copy_barcode && <div className="muted">{loan.copy_barcode}</div>}
+                </td>
+                <td>
+                  {loan.member_name ?? t('common.unknown')}
+                  {loan.member_email && <div className="muted">{loan.member_email}</div>}
+                </td>
                 <td>{fmtDate(loan.borrowed_at, lang)}</td>
                 <td>
                   {fmtDate(loan.due_at, lang)}{' '}
@@ -184,9 +194,12 @@ export default function LoansPage() {
             <tbody>
               {fines.map((fine) => (
                 <tr key={fine.id}>
-                  <td className="muted">{fine.member_id}</td>
-                  <td>{fine.amount.toFixed(2)}</td>
-                  <td>{fine.reason}</td>
+                  <td>
+                    {fine.member_name ?? t('common.unknown')}
+                    {fine.member_email && <div className="muted">{fine.member_email}</div>}
+                  </td>
+                  <td>{fmtMoney(fine.amount, lang)}</td>
+                  <td>{fineReason(fine.reason, t)}</td>
                   <td>
                     <button
                       type="button"

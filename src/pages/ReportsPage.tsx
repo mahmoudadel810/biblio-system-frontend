@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useI18n } from '../i18n';
-import { fmtDate } from '../public/format';
+import { fmtDate, fmtMoney } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api } from '../api/client';
 import type {
@@ -63,7 +63,7 @@ export default function ReportsPage() {
             <div className="label">{t('rep.res')}</div>
           </div>
           <div className="stat-card">
-            <div className="value">{overview.unpaid_fines_total.toFixed(2)}</div>
+            <div className="value">{fmtMoney(overview.unpaid_fines_total, lang)}</div>
             <div className="label">{t('rep.unpaid')}</div>
           </div>
         </div>
@@ -142,17 +142,17 @@ export default function ReportsPage() {
               <tr>
                 <td>{t('rep.fUnpaid')}</td>
                 <td>{fines.unpaid_count}</td>
-                <td>{fines.unpaid_total.toFixed(2)}</td>
+                <td>{fmtMoney(fines.unpaid_total, lang)}</td>
               </tr>
               <tr>
                 <td>{t('rep.fPaid')}</td>
                 <td>{fines.paid_count}</td>
-                <td>{fines.paid_total.toFixed(2)}</td>
+                <td>{fmtMoney(fines.paid_total, lang)}</td>
               </tr>
               <tr>
                 <td>{t('rep.fWaived')}</td>
                 <td>{fines.waived_count}</td>
-                <td>{fines.waived_total.toFixed(2)}</td>
+                <td>{fmtMoney(fines.waived_total, lang)}</td>
               </tr>
             </tbody>
           </table>

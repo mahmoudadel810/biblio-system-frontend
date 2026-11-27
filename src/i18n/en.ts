@@ -454,4 +454,12 @@ export const en: Record<string, string> = {
   'auth.noToken': "This reset link is incomplete. Ask for a new one.",
   'auth.resetOk': "Your password was changed. You were signed out everywhere. Sign in with the new one.",
   'auth.resetFail': "This reset link is invalid or has expired. Ask for a new one.",
+  'picker.none': "No matches",
+  'picker.clear': "Clear",
+  'loans.pickCopy': "Find a copy by book title or barcode",
+  'loans.pickMember': "Find a member by name or email",
+  'loans.filterMember': "Filter by member name or email",
+  'common.unknown': "Unknown",
+  'fines.late': "Late return",
+  'fines.lateMore': "Late return (continued)",
 };

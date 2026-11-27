@@ -273,3 +273,14 @@ form.inline-form {
 
 /* Unread badge on the Notifications link. Flat colour, no motion. */
 .nav-badge { display: inline-block; min-width: 1.35em; margin-inline-start: .4em; padding: 0 .4em; border-radius: 999px; background: #c0392b; color: #fff; font-size: .75rem; font-weight: 700; line-height: 1.5; text-align: center; }
+
+/* Search pickers (staff desk): people and copies by name, never by id. */
+.picker { position: relative; flex: 1 1 220px; min-width: 0; }
+.picker input { width: 100%; }
+.picker-list { position: static; margin: 6px 0 0; padding: 4px; list-style: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; max-height: 260px; overflow: auto; }
+.picker-list button { display: block; width: 100%; text-align: start; background: transparent; color: inherit; border: 0; padding: 10px 12px; border-radius: 8px; font: inherit; cursor: pointer; }
+.picker-list button:hover, .picker-list button:focus-visible { background: rgba(127,127,127,.12); }
+.picker-empty { padding: 10px 12px; }
+.picker-chosen { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 1 1 220px; min-width: 0; padding: 6px 6px 6px 12px; border: 1px solid var(--border); border-radius: 12px; }
+.picker-chosen > span { overflow-wrap: anywhere; }
+.inline-form { align-items: flex-start; }

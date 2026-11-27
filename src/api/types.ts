@@ -74,6 +74,10 @@ export interface Loan {
   due_at: string;
   returned_at: string | null;
   renewed_count: number;
+  member_name?: string | null;
+  member_email?: string | null;
+  book_title?: string | null;
+  copy_barcode?: string | null;
 }
 
 export interface Reservation {
@@ -92,6 +96,8 @@ export interface Fine {
   amount: number;
   reason: string;
   status: 'unpaid' | 'paid' | 'waived';
+  member_name?: string | null;
+  member_email?: string | null;
 }
 
 export interface AppNotification {
@@ -143,6 +149,7 @@ export interface LibrarySettings {
 export interface AuditLog {
   id: string;
   actor_id: string | null;
+  actor_name?: string | null;
   action: string;
   entity_type: string;
   entity_id: string | null;
@@ -152,6 +159,7 @@ export interface AuditLog {
 
 export interface Transfer {
   id: string;
+  copy_label?: string | null;
   copy_id: string;
   from_branch_id: string;
   to_branch_id: string;
@@ -199,6 +207,7 @@ export interface PurchaseOrderWithItems extends PurchaseOrder {
 
 export interface Adjustment {
   id: string;
+  copy_label?: string | null;
   copy_id: string;
   adjusted_by: string | null;
   from_status: string;
@@ -221,6 +230,7 @@ export interface Payment {
   method: 'cash' | 'card' | 'transfer';
   received_by: string | null;
   created_at: string;
+  member_name?: string | null;
 }
 
 export interface PaymentSummary {
