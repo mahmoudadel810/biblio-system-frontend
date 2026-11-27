@@ -7,7 +7,7 @@ import { reason } from '../public/BorrowDialog';
 
 interface MyLoan { id: string; book_slug: string | null; title: string; title_ar: string | null; due_at: string; returned_at: string | null; renewals_left: number; overdue: boolean }
 interface MyHold { id: string; book_slug: string | null; title: string; title_ar: string | null; status: string; expires_at: string; queue_position: number }
-interface DLoan { id: string; book_slug: string | null; book_title: string; days_left: number }
+interface DLoan { id: string; book_slug: string | null; book_title: string; book_title_ar?: string | null; days_left: number }
 interface Fine { id: string; amount: number; reason: string; status: string }
 
 // The member's own loans, holds and fines, with the reason shown when an action is blocked.
@@ -59,7 +59,7 @@ export default function MyLibrary() {
           {dl.map((d) => (
             <li key={d.id}>
               <div>
-                {d.book_slug ? <Link to={`/books/${d.book_slug}`}><bdi>{d.book_title}</bdi></Link> : <bdi>{d.book_title}</bdi>}
+                {d.book_slug ? <Link to={`/books/${d.book_slug}`}><bdi>{lang === 'ar' && d.book_title_ar ? d.book_title_ar : d.book_title}</bdi></Link> : <bdi>{lang === 'ar' && d.book_title_ar ? d.book_title_ar : d.book_title}</bdi>}
                 <div className="muted small">{t('my.daysleft').replace('{n}', String(d.days_left))}</div>
               </div>
               {d.book_slug && <Link className="pill ghost" to={`/read/${d.book_slug}`}>{t('my.read')}</Link>}
