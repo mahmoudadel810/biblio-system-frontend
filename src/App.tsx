@@ -8,6 +8,7 @@ import BookPage from './public/BookPage';
 import { AuthorsPage, AuthorPage } from './public/AuthorsPage';
 import LibraryStartPage from './public/LibraryStartPage';
 import DirectoryPage from './public/DirectoryPage';
+import CreditsPage from './public/CreditsPage';
 const StoreListingsPage = lazy(() => import('./pages/StoreListingsPage'));
 const ReaderPage = lazy(() => import('./public/ReaderPage'));
 import ProtectedRoute from './components/ProtectedRoute';
@@ -62,6 +63,7 @@ export default function App() {
         <Route path="/authors" element={<AuthorsPage />} />
         <Route path="/authors/:slug" element={<AuthorPage />} />
         <Route path="/library/start" element={<LibraryStartPage />} />
+        <Route path="/credits" element={<CreditsPage />} />
         <Route path="/libraries" element={<DirectoryPage kind="library" />} />
         <Route path="/bookstores" element={<DirectoryPage kind="bookstore" />} />
       </Route>
