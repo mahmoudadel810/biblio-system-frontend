@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useI18n } from '../i18n';
-import { fmtDate } from '../public/format';
+import { fmtDate, fmtMoney } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type {
@@ -235,7 +235,7 @@ export default function ProcurementPage() {
                 <td>{supplierName(o.supplier_id)}</td>
                 <td>
                   {o.items
-                    .map((i) => `${i.quantity} x ${i.unit_cost.toFixed(2)}`)
+                    .map((i) => `${i.quantity} x ${fmtMoney(i.unit_cost, lang)}`)
                     .join(', ')}
                 </td>
                 <td>

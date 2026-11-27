@@ -12,8 +12,11 @@ export const fmtDate = (iso: string, lang: Lang) => {
 };
 // Amounts are in SAR. The currency symbol follows the locale.
 export const fmtMoney = (n: number, lang: Lang) =>
-  new Intl.NumberFormat(lang === 'ar' ? 'ar-SA' : 'en-SA', { style: 'currency', currency: 'SAR' }).format(n);
+  new Intl.NumberFormat(lang === 'ar' ? 'ar-SA-u-nu-latn' : 'en-SA', { style: 'currency', currency: 'SAR' }).format(n);
 export const fmtDateTime = (iso: string, lang: Lang) => {
   const cal = getCalendar() === 'hijri' ? 'islamic-umalqura' : 'gregory';
   return new Intl.DateTimeFormat(`${lang === 'ar' ? 'ar-SA' : 'en-GB'}-u-ca-${cal}-nu-latn`, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso));
 };
+// Fine reasons are stored in English by the server; show them in the reader's language.
+export const fineReason = (reason: string, t: (k: string) => string) =>
+  reason === 'late return' ? t('fines.late') : reason === 'late return (continued)' ? t('fines.lateMore') : reason;

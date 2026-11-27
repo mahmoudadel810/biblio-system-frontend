@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, ApiError } from '../api/client';
 import { useI18n } from '../i18n';
-import { fmtDate, fmtMoney, getCalendar, setCalendar } from '../public/format';
+import { fmtDate, fmtMoney, fineReason, getCalendar, setCalendar } from '../public/format';
 import { reason } from '../public/BorrowDialog';
 
 interface MyLoan { id: string; book_slug: string | null; title: string; title_ar: string | null; due_at: string; returned_at: string | null; renewals_left: number; overdue: boolean }
@@ -93,7 +93,7 @@ export default function MyLibrary() {
       {fines.length === 0 ? <p className="muted">{t('my.nofines')}</p> : (
         <>
           <p><strong><bdi>{fmtMoney(total, lang)}</bdi></strong> {t('my.finesNote')}</p>
-          <ul className="mylist">{fines.map((f) => <li key={f.id}><span>{f.reason}</span><bdi>{fmtMoney(f.amount, lang)}</bdi></li>)}</ul>
+          <ul className="mylist">{fines.map((f) => <li key={f.id}><span>{fineReason(f.reason, t)}</span><bdi>{fmtMoney(f.amount, lang)}</bdi></li>)}</ul>
         </>
       )}
     </section>

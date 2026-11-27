@@ -63,9 +63,9 @@ export default function AuditPage() {
               <td>{fmtDateTime(log.created_at, lang)}</td>
               <td>{log.action}</td>
               <td>
-                {log.entity_type} <span className="muted">{log.entity_id}</span>
+                {log.entity_type}{log.entity_id && <span className="muted"> #{log.entity_id.slice(0, 8)}</span>}
               </td>
-              <td className="muted">{log.actor_id ?? t('audit.system')}</td>
+              <td>{log.actor_name ?? t('audit.system')}</td>
               <td className="muted">{JSON.stringify(log.details)}</td>
             </tr>
           ))}

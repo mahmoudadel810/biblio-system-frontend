@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useI18n } from '../i18n';
-import { fmtDateTime } from '../public/format';
+import { fmtDateTime, fmtMoney, fineReason } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type { Fine, Payment, PaymentSummary } from '../api/types';
@@ -54,7 +54,7 @@ export default function PaymentsPage() {
       {summary && (
         <div className="stat-grid">
           <div className="stat-card">
-            <div className="value">{summary.collected.toFixed(2)}</div>
+            <div className="value">{fmtMoney(summary.collected, lang)}</div>
             <div className="label">{t('pay.collected').replace('{n}', String(summary.days))}</div>
           </div>
           <div className="stat-card">
@@ -63,7 +63,7 @@ export default function PaymentsPage() {
           </div>
           {summary.by_method.map((m) => (
             <div className="stat-card" key={m.method}>
-              <div className="value">{m.total.toFixed(2)}</div>
+              <div className="value">{fmtMoney(m.total, lang)}</div>
               <div className="label">
                 {t(`common.${m.method}`)} ({m.payments})
               </div>
@@ -83,7 +83,7 @@ export default function PaymentsPage() {
             <option value="">{t('pay.unpaid')}</option>
             {unpaid.map((f) => (
               <option key={f.id} value={f.id}>
-                {f.amount.toFixed(2)} - {f.reason}
+                {fmtMoney(f.amount, lang)} - {fineReason(f.reason, t)}
               </option>
             ))}
           </select>
@@ -116,8 +116,8 @@ export default function PaymentsPage() {
             {payments.map((p) => (
               <tr key={p.id}>
                 <td>{fmtDateTime(p.created_at, lang)}</td>
-                <td className="muted">{p.member_id}</td>
-                <td>{p.amount.toFixed(2)}</td>
+                <td>{p.member_name ?? t('common.unknown')}</td>
+                <td>{fmtMoney(p.amount, lang)}</td>
                 <td>{t(`common.${p.method}`)}</td>
               </tr>
             ))}

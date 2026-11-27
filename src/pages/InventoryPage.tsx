@@ -142,7 +142,7 @@ export default function InventoryPage() {
             {adjustments.map((a) => (
               <tr key={a.id}>
                 <td>{fmtDateTime(a.created_at, lang)}</td>
-                <td className="muted">{a.copy_id}</td>
+                <td>{a.copy_label ?? t('common.unknown')}</td>
                 <td>{st(a.from_status)}</td>
                 <td>{st(a.to_status)}</td>
                 <td>{a.reason}</td>
