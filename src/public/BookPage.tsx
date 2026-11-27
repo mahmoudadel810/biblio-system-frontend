@@ -2,7 +2,9 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useI18n } from '../i18n';
 import { useAuth } from '../auth/AuthContext';
 import { useFetch, useReveal, useTitle } from './hooks';
+import { useState } from 'react';
 import { BookTile, Cover } from './Cards';
+import BorrowDialog from './BorrowDialog';
 import type { BookDetail } from './api';
 
 export default function BookPage() {
@@ -11,6 +13,7 @@ export default function BookPage() {
   const ar = lang === 'ar';
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [dlg, setDlg] = useState(false);
   const location = useLocation();
   const { data: b, loading, error, status } = useFetch<BookDetail>(`/books/${encodeURIComponent(slug ?? '')}`);
   useTitle(b ? (ar && b.title_ar ? b.title_ar : b.title) : '');
@@ -26,12 +29,13 @@ export default function BookPage() {
   // rental screens ship.
   const borrow = () => {
     if (!user) navigate(`/register?next=${encodeURIComponent(location.pathname)}&intent=borrow`);
-    else navigate(`/catalog?q=${encodeURIComponent(b.title)}`);
+    else setDlg(true);
   };
   const title = ar && b.title_ar ? b.title_ar : b.title;
   const desc = ar && b.description_ar ? b.description_ar : b.description;
   return (
     <article className="band book">
+      {dlg && <BorrowDialog bookId={b.id} title={title} onClose={() => setDlg(false)} />}
       <Cover book={{ ...b, title }} eager />
       <div>
         {b.tag && <span className="tag">{b.tag}</span>}

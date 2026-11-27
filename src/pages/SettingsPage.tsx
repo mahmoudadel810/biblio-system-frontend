@@ -55,8 +55,15 @@ export default function SettingsPage() {
       <form className="inline-form" onSubmit={save}>
         {field('Loan days', 'loan_days')}
         {field('Max renewals', 'max_renewals')}
-        {field('Fine per day', 'fine_per_day', '0.01')}
+        {field('Fine per day (SAR)', 'fine_per_day', '0.01')}
         {field('Reservation days', 'reservation_days')}
+        {field('Max loan days (members may pick up to this)', 'max_loan_days')}
+        {field('Max fine per loan (SAR, late fine stops here)', 'max_fine_per_loan', '0.01')}
+        {field('Lost book fee (SAR)', 'lost_fee', '0.01')}
+        {field('Damaged book fee (SAR)', 'damaged_fee', '0.01')}
+        {field('Digital loan days', 'digital_loan_days')}
+        {field('Hold pickup days', 'hold_pickup_days')}
+        {field('Max books on loan at once', 'max_open_loans')}
         <button type="submit">Save</button>
       </form>
       {message && <p>{message}</p>}
