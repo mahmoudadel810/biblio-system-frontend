@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useI18n } from '../i18n';
 import { useFetch, useReveal, useTitle } from './hooks';
 import { useHeroTilt } from './HeroTilt';
+import Mascot from './Mascot';
 import { AuthorTile, BookTile, HeroBook } from './Cards';
 import type { AuthorCard, BookCard, Category, Page, Quote } from './api';
 
@@ -27,6 +28,7 @@ export default function HomePage() {
             <Link className="pill" to="/books">{t('home.browse')}</Link>
             <Link className="pill ghost" to="/register">{t('nav.join')}</Link>
           </div>
+          <Mascot />
         </div>
         {hero && <HeroBook book={hero} />}
       </section>
