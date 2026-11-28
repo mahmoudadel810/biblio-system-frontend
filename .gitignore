@@ -2,3 +2,7 @@ node_modules
 dist
 .env
 *.local
+# Compiler output: tsc writes these if run with project references; Vite would load a stale vite.config.js first
+vite.config.js
+vite.config.d.ts
+*.tsbuildinfo
