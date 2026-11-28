@@ -12,6 +12,7 @@ import CreditsPage from './public/CreditsPage';
 const StoreListingsPage = lazy(() => import('./pages/StoreListingsPage'));
 const ReaderPage = lazy(() => import('./public/ReaderPage'));
 import AnalyticsPage from './pages/AnalyticsPage';
+import OrgPage from './public/OrgPage';
 import ClubsPage from './public/ClubsPage';
 import ClubPage from './public/ClubPage';
 import NearbyPage from './public/NearbyPage';
@@ -82,6 +83,8 @@ export default function App() {
         <Route path="/library/start" element={<LibraryStartPage />} />
         <Route path="/credits" element={<CreditsPage />} />
         <Route path="/libraries" element={<DirectoryPage kind="library" />} />
+        <Route path="/libraries/:slug" element={<OrgPage />} />
+        <Route path="/bookstores/:slug" element={<OrgPage />} />
         <Route path="/bookstores" element={<DirectoryPage kind="bookstore" />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
