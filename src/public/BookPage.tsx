@@ -8,6 +8,7 @@ import BorrowDialog from './BorrowDialog';
 import WhereToBuy from './WhereToBuy';
 import BookReviews from './BookReviews';
 import AddToList from './AddToList';
+import WishlistButton from './WishlistButton';
 import { api, ApiError } from '../api/client';
 import type { BookDetail } from './api';
 
@@ -74,6 +75,7 @@ export default function BookPage() {
           <button type="button" className="pill" onClick={borrow}>{t('book.borrow')}</button>
           {hasDigital && <button type="button" className="pill ghost" onClick={read}>{t('book.read')}</button>}
         </div>
+        {user && <WishlistButton slug={b.slug} availableNow={b.availability.some((a) => a.available > 0)} />}
         {user && <AddToList slug={b.slug} />}
         {hasDigital && <p className="muted small">{t('read.loandays').replace('{n}', String(digital.data?.loan_days ?? ''))}</p>}
         {readErr && <p className="error small" role="alert">{readErr}</p>}
