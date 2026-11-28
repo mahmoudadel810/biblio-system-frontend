@@ -3,6 +3,7 @@ import { useI18n } from '../i18n';
 import { fmtDate, fmtMoney } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api } from '../api/client';
+import { downloadCsv } from '../csv';
 import type {
   CirculationDay,
   FinesSummary,
@@ -32,10 +33,30 @@ export default function ReportsPage() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const on = () => document.body.classList.add('printing-report');
+    const off = () => document.body.classList.remove('printing-report');
+    on();
+    return off;
+  }, []);
+
+  const stamp = new Date().toISOString().slice(0, 10);
+  const exp = (name: string, head: string[], rows: unknown[][]) => () =>
+    downloadCsv(`biblio-${name}-${stamp}.csv`, head.map((k) => t(k)), rows);
+  const Actions = ({ onCsv }: { onCsv: () => void }) => (
+    <div className="no-print rep-actions">
+      <button type="button" className="pill ghost" onClick={onCsv}>{t('rep.csv')}</button>
+    </div>
+  );
+
   if (error) return <p className="error-text">{error}</p>;
 
   return (
     <>
+      <div className="no-print rep-actions">
+        <button type="button" className="pill" onClick={() => window.print()}>{t('rep.print')}</button>
+      </div>
+      <h1 className="print-only">{t('staff.nav.reports')} · {stamp}</h1>
       {overview && (
         <div className="stat-grid">
           <div className="stat-card">
@@ -71,6 +92,7 @@ export default function ReportsPage() {
 
       <div className="panel">
         <h2>{t('rep.popular')}</h2>
+        <Actions onCsv={exp('popular', ['rep.title','rep.isbn','rep.loans','rep.activeRes'], popular.map((b) => [b.title, b.isbn, b.loan_count, b.active_reservations]))} />
         <table>
           <thead>
             <tr>
@@ -95,6 +117,7 @@ export default function ReportsPage() {
 
       <div className="panel">
         <h2>{t('rep.overdueTitle')}</h2>
+        <Actions onCsv={exp('overdue', ['rep.member','rep.book','rep.barcode','rep.due','rep.late'], overdue.map((o) => [o.member_name, o.book_title, o.barcode, o.due_at.slice(0, 10), o.days_overdue]))} />
         {overdue.length === 0 ? (
           <p className="muted">{t('rep.nothing')}</p>
         ) : (
@@ -130,6 +153,7 @@ export default function ReportsPage() {
       {fines && (
         <div className="panel">
           <h2>{t('rep.fines')}</h2>
+        <Actions onCsv={exp('fines', ['rep.fines','rep.count','rep.total'], [[t('rep.fUnpaid'), fines.unpaid_count, fines.unpaid_total], [t('rep.fPaid'), fines.paid_count, fines.paid_total], [t('rep.fWaived'), fines.waived_count, fines.waived_total]])} />
           <table>
             <thead>
               <tr>
@@ -161,6 +185,7 @@ export default function ReportsPage() {
 
       <div className="panel">
         <h2>{t('rep.circ')}</h2>
+        <Actions onCsv={exp('circulation', ['rep.day','rep.loans','rep.returns','rep.renewals'], activity.map((d) => [d.day, d.loans, d.returns, d.renewals]))} />
         <table>
           <thead>
             <tr>
