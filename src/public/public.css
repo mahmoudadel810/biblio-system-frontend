@@ -155,3 +155,6 @@ blockquote { margin: var(--s-4) 0; padding-inline-start: var(--s-4); border-inli
 .dig-form input, .dig-form select, .dig-form button { max-width: 100%; box-sizing: border-box; }
 .dig-form .picker input { width: 100%; }
 .dig-form input[type="file"] { width: 100%; min-width: 0; padding: var(--s-2); }
+/* Author circles: the img height attribute must not stretch the photo past its square. */
+.tile .cover.round { height: auto; }
+.cover.blank.initials { font-size: clamp(1.5rem, 6vw, 2.25rem); letter-spacing: .02em; padding: 0; }
