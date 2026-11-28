@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useI18n } from '../i18n';
 import { useFetch, useReveal, useTitle } from './hooks';
@@ -7,6 +8,54 @@ import './home-motion.css';
 import Mascot from './Mascot';
 import { AuthorTile, Cover, HeroBook } from './Cards';
 import type { AuthorCard, BookCard, Category, Page, Quote } from './api';
+
+// The turning book swaps to a new random catalog cover each time a face is hidden (edge-on), never repeating one
+// that is showing or was just shown. Swaps happen out of sight and are preloaded, so nothing flickers.
+function useSpinCovers(pool: string[], first: string) {
+  const front = useRef<HTMLImageElement>(null);
+  const back = useRef<HTMLImageElement>(null);
+  const scene = useRef<HTMLElement>(null);
+  const key = pool.join('|');
+  useEffect(() => {
+    const f = front.current, b = back.current, sc = scene.current;
+    if (!f || !b || !sc || pool.length < 3 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const recent: string[] = [first];
+    const pick = () => {
+      const avoid = new Set(recent.slice(-3));
+      const opts = pool.filter((u) => !avoid.has(u));
+      const u = opts[Math.floor(Math.random() * opts.length)] ?? pool[0];
+      recent.push(u);
+      const im = new Image(); im.src = u;
+      return u;
+    };
+    let nextF = pick(); // for the front face once it turns away
+    let nextB = '';
+    b.src = pick();
+    const rot = () => {
+      const p = parseFloat(sc.style.getPropertyValue('--p') || '0');
+      return Math.max(0, Math.min(720, (p - 0.16) * 1080));
+    };
+    // Zones by angle: 0-90 front, 90-270 back, 270-450 front, 450-630 back, 630-720 front.
+    const zone = (a: number) => (a < 90 ? 0 : a < 270 ? 1 : a < 450 ? 2 : a < 630 ? 3 : 4);
+    let z = zone(rot());
+    nextB = pick();
+    let raf = 0;
+    const tick = () => {
+      raf = 0;
+      const nz = zone(rot());
+      if (nz === z) return;
+      // The face that just turned away gets its next cover.
+      const hidden = nz % 2 === 1 ? f : b;
+      if (nz % 2 === 1) { hidden.src = nextF; nextF = pick(); } else { hidden.src = nextB; nextB = pick(); }
+      z = nz;
+    };
+    const on = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    window.addEventListener('scroll', on, { passive: true });
+    return () => { window.removeEventListener('scroll', on); cancelAnimationFrame(raf); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+  return { front, back, scene };
+}
 
 const COLORS = ['c-green', 'c-paper', 'c-accent', 'c-ink'];
 
@@ -49,7 +98,8 @@ export default function HomePage() {
   const rowB = items.slice(half);
   const qText = q ? (ar && q.text_ar ? q.text_ar : q.text) : '';
   const words = qText.split(/\s+/).filter(Boolean);
-  const spinBook = bySlug('don-quixote');
+  const spinFirst = bySlug('don-quixote')?.cover_url ?? hero?.cover_url ?? '';
+  const spin = useSpinCovers(items.map((b) => b.cover_url as string), spinFirst);
   return (
     <>
       <div className="page-progress" role="presentation" />
@@ -86,7 +136,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="scene spin-scene" data-scene aria-label={`${t('home.step.find')}, ${t('home.step.borrow')}, ${t('home.step.read')}`}>
+      <section ref={spin.scene} className="scene spin-scene" data-scene aria-label={`${t('home.step.find')}, ${t('home.step.borrow')}, ${t('home.step.read')}`}>
         <div className="pin">
           <div className="steps">
             {(['find', 'borrow', 'read'] as const).map((k, i) => (
@@ -99,8 +149,8 @@ export default function HomePage() {
           </div>
           <div className="spin-wrap" aria-hidden="true">
             <div className="spin">
-              <img className="face front" src={spinBook?.cover_url ?? hero?.cover_url ?? ''} alt="" width={200} height={300} />
-              <div className="face back"><strong>Biblio</strong></div>
+              <img ref={spin.front} className="face front" src={spinFirst} alt="" width={200} height={300} />
+              <img ref={spin.back} className="face back" src={spinFirst} alt="" width={200} height={300} />
             </div>
           </div>
         </div>
