@@ -150,3 +150,8 @@ blockquote { margin: var(--s-4) 0; padding-inline-start: var(--s-4); border-inli
 .org-books a { display: block; text-decoration: none; }
 .org-books .cover { inline-size: 100%; block-size: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 6px; }
 .org-books span { display: block; margin-block-start: var(--s-1); font-size: .875rem; }
+.dig-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
+.dig-form label { min-width: 0; }
+.dig-form input, .dig-form select, .dig-form button { max-width: 100%; box-sizing: border-box; }
+.dig-form .picker input { width: 100%; }
+.dig-form input[type="file"] { width: 100%; min-width: 0; padding: var(--s-2); }

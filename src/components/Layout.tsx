@@ -31,7 +31,7 @@ export default function Layout() {
 
   const titleKeys: Record<string, string> = {
     '/app': isStaff ? 'staff.nav.dashboard' : 'reader.mylib', '/catalog': 'staff.nav.catalog', '/notifications': 'reader.notes',
-    '/loans': 'staff.nav.loans', '/desk': 'staff.nav.desk', '/labels': 'staff.nav.labels', '/members': 'staff.nav.members', '/transfers': 'staff.nav.transfers', '/interlibrary': 'staff.nav.interlibrary',
+    '/loans': 'staff.nav.loans', '/desk': 'staff.nav.desk', '/labels': 'staff.nav.labels', '/members': 'staff.nav.members', '/transfers': 'staff.nav.transfers', '/interlibrary': 'staff.nav.interlibrary', '/digital-admin': 'staff.nav.digital',
     '/procurement': 'staff.nav.procurement', '/inventory': 'staff.nav.inventory', '/import': 'staff.nav.import',
     '/payments': 'staff.nav.payments', '/reports': 'staff.nav.reports', '/analytics': 'staff.nav.analytics', '/settings': 'staff.nav.settings',
     '/organizations': 'staff.nav.orgs', '/audit': 'staff.nav.audit', '/account': 'nav.account',
@@ -90,6 +90,7 @@ export default function Layout() {
           {isFull && <NavLink to="/payments">{t('staff.nav.payments')}</NavLink>}
           {isFull && <NavLink to="/reports">{t('staff.nav.reports')}</NavLink>}
           {isFull && <NavLink to="/analytics">{t('staff.nav.analytics')}</NavLink>}
+          {isAdmin && <NavLink to="/digital-admin">{t('staff.nav.digital')}</NavLink>}
           {isAdmin && <NavLink to="/settings">{t('staff.nav.settings')}</NavLink>}
           {isAdmin && <NavLink to="/organizations">{t('staff.nav.orgs')}</NavLink>}
           {isAdmin && <NavLink to="/audit">{t('staff.nav.audit')}</NavLink>}
