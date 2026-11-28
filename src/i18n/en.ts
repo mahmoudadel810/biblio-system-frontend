@@ -674,4 +674,9 @@ export const en: Record<string, string> = {
   'an.nodata': "Nothing to show yet.",
   'an.newmembers': "New members",
   'an.newmembers.sum': "new members in this period",
+  'org.notfound': "This page does not exist.",
+  'org.titles': "titles in the collection",
+  'org.branches': "Branches",
+  'org.nobranches': "No branches listed yet.",
+  'org.books': "From the collection",
 };

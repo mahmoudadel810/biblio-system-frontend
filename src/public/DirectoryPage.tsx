@@ -35,7 +35,7 @@ export default function DirectoryPage({ kind }: { kind: 'library' | 'bookstore' 
       <ul className="dir-grid">
         {items.map((o) => (
           <li key={o.id} className="dir-card">
-            <h2><bdi>{o.name}</bdi></h2>
+            <h2><Link to={`/${kind === 'library' ? 'libraries' : 'bookstores'}/${encodeURIComponent(o.slug)}`}><bdi>{o.name}</bdi></Link></h2>
             {(o.city || o.country) && <p className="muted"><bdi>{[o.city, o.country].filter(Boolean).join(', ')}</bdi></p>}
             {o.description && <p>{o.description}</p>}
           </li>

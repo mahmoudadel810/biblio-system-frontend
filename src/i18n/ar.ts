@@ -674,4 +674,9 @@ export const ar: Record<string, string> = {
   'an.nodata': "لا شيء للعرض بعد.",
   'an.newmembers': "أعضاء جدد",
   'an.newmembers.sum': "عضوًا جديدًا في هذه الفترة",
+  'org.notfound': "هذه الصفحة غير موجودة.",
+  'org.titles': "عناوين في المجموعة",
+  'org.branches': "الفروع",
+  'org.nobranches': "لا توجد فروع مدرجة بعد.",
+  'org.books': "من المجموعة",
 };
