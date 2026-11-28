@@ -25,6 +25,8 @@ export interface Branch {
   phone: string | null;
   address: string;
   is_active: boolean;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export interface Author {

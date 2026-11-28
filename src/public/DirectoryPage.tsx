@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useI18n } from '../i18n';
+import { Link } from 'react-router-dom';
 import { useFetch, useTitle } from './hooks';
 
 interface Org { id: string; kind: string; name: string; slug: string; description: string | null; city: string | null; country: string | null }
@@ -18,6 +19,7 @@ export default function DirectoryPage({ kind }: { kind: 'library' | 'bookstore' 
     <section className="band">
       <h1>{title}</h1>
       <p className="muted">{t('dir.lead')}</p>
+      {kind === 'library' && <p><Link className="pill ghost" to="/near">{t('near.link')}</Link></p>}
       {cities.length > 1 && (
         <label className="field-inline">
           <span>{t('dir.city')}</span>
