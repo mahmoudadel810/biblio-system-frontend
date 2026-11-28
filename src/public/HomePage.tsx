@@ -17,7 +17,10 @@ export default function HomePage() {
   useReveal([books.data, cats.data, popular.data, quote.data, lang]);
   useHeroTilt();
   const q = quote.data?.[0];
-  const hero = books.data?.items.find((b) => b.cover_url) ?? null;
+  // Hero is pinned to Don Quixote (owner's choice); the cover is the Open Library edition already used in the catalog.
+  const hero: Pick<BookCard, 'title' | 'cover_url' | 'authors'> | null = books.data
+    ? { title: 'Don Quixote', cover_url: 'https://covers.openlibrary.org/b/id/13846974-L.jpg', authors: [{ slug: null, name: 'Miguel de Cervantes', name_ar: 'ميغيل دي ثربانتس' }] }
+    : null;
   return (
     <>
       <section className="hero">

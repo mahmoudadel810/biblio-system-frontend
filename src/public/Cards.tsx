@@ -105,7 +105,7 @@ export function AuthorTile({ a }: { a: AuthorCard }) {
 }
 
 // Floating book for the hero: tilts with scroll and pointer (transform only).
-export function HeroBook({ book }: { book: BookCard }) {
+export function HeroBook({ book }: { book: Pick<BookCard, 'title' | 'cover_url' | 'authors'> }) {
   return (
     <div className="hero-book" aria-hidden="true">
       <div className="hero-book-inner">
