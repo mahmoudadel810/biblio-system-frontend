@@ -77,6 +77,7 @@ export default function MembersPage() {
                       }
                     >
                       <option value="member">{t('role.member')}</option>
+                      <option value="assistant">{t('role.assistant')}</option>
                       <option value="librarian">{t('role.librarian')}</option>
                       <option value="admin">{t('role.admin')}</option>
                     </select>

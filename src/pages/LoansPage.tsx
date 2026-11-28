@@ -4,12 +4,14 @@ import { fmtDate, fmtMoney, fineReason } from '../public/format';
 import { useCalendar } from '../public/useCalendar';
 import { api, ApiError } from '../api/client';
 import type { Fine, Loan, Member } from '../api/types';
+import { useAuth } from '../auth/AuthContext';
 import Picker, { type PickItem } from '../components/Picker';
 
 // Staff desk: borrow by copy barcode, return and renew loans, and collect
 // fine payments through the fines endpoint.
 export default function LoansPage() {
   const { t, lang } = useI18n();
+  const { user } = useAuth();
   useCalendar();
   const [loans, setLoans] = useState<Loan[]>([]);
   const [fines, setFines] = useState<Fine[]>([]);
@@ -177,7 +179,7 @@ export default function LoansPage() {
         {more && <button type="button" className="pill ghost" onClick={loadMore}>{t('more')}</button>}
       </div>
 
-      <div className="panel">
+      {user?.role !== 'assistant' && <div className="panel">
         <h2>{t('fines.title')}</h2>
         {fines.length === 0 ? (
           <p className="muted">{t('fines.none')}</p>
@@ -216,7 +218,7 @@ export default function LoansPage() {
             </tbody>
           </table>
         )}
-      </div>
+      </div>}
     </>
   );
 }

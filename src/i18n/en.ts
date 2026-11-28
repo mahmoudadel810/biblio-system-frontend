@@ -679,4 +679,5 @@ export const en: Record<string, string> = {
   'org.branches': "Branches",
   'org.nobranches': "No branches listed yet.",
   'org.books': "From the collection",
+  'role.assistant': "desk assistant",
 };

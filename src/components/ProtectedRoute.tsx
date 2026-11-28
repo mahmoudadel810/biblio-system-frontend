@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import type { Role } from '../api/types';
 
-const ROLE_RANK: Record<Role, number> = { member: 0, librarian: 1, admin: 2 };
+const ROLE_RANK: Record<Role, number> = { member: 0, assistant: 1, librarian: 2, admin: 3 };
 
 interface Props {
   children: ReactNode;

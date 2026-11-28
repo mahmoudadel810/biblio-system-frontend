@@ -12,7 +12,9 @@ export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const isStaff = user?.role === 'librarian' || user?.role === 'admin';
+  const isDesk = user?.role === 'assistant';
+  const isStaff = user?.role === 'librarian' || user?.role === 'admin' || isDesk;
+  const isFull = isStaff && !isDesk;
   const isAdmin = user?.role === 'admin';
   const { t, lang, setLang } = useI18n();
   const [cal, toggleCal] = useCalendar();
@@ -77,16 +79,16 @@ export default function Layout() {
           <NavLink to="/catalog">{t('staff.nav.catalog')}</NavLink>
           <NavLink to="/notifications">{t('reader.notes')}{badge}</NavLink>
           {isStaff && <NavLink to="/desk">{t('staff.nav.desk')}</NavLink>}
-          {isStaff && <NavLink to="/labels">{t('staff.nav.labels')}</NavLink>}
+          {isFull && <NavLink to="/labels">{t('staff.nav.labels')}</NavLink>}
           {isStaff && <NavLink to="/loans">{t('staff.nav.loans')}</NavLink>}
           {isStaff && <NavLink to="/members">{t('staff.nav.members')}</NavLink>}
-          {isStaff && <NavLink to="/transfers">{t('staff.nav.transfers')}</NavLink>}
-          {isStaff && <NavLink to="/procurement">{t('staff.nav.procurement')}</NavLink>}
-          {isStaff && <NavLink to="/inventory">{t('staff.nav.inventory')}</NavLink>}
-          {isStaff && <NavLink to="/import">{t('staff.nav.import')}</NavLink>}
-          {isStaff && <NavLink to="/payments">{t('staff.nav.payments')}</NavLink>}
-          {isStaff && <NavLink to="/reports">{t('staff.nav.reports')}</NavLink>}
-          {isStaff && <NavLink to="/analytics">{t('staff.nav.analytics')}</NavLink>}
+          {isFull && <NavLink to="/transfers">{t('staff.nav.transfers')}</NavLink>}
+          {isFull && <NavLink to="/procurement">{t('staff.nav.procurement')}</NavLink>}
+          {isFull && <NavLink to="/inventory">{t('staff.nav.inventory')}</NavLink>}
+          {isFull && <NavLink to="/import">{t('staff.nav.import')}</NavLink>}
+          {isFull && <NavLink to="/payments">{t('staff.nav.payments')}</NavLink>}
+          {isFull && <NavLink to="/reports">{t('staff.nav.reports')}</NavLink>}
+          {isFull && <NavLink to="/analytics">{t('staff.nav.analytics')}</NavLink>}
           {isAdmin && <NavLink to="/settings">{t('staff.nav.settings')}</NavLink>}
           {isAdmin && <NavLink to="/organizations">{t('staff.nav.orgs')}</NavLink>}
           {isAdmin && <NavLink to="/audit">{t('staff.nav.audit')}</NavLink>}
