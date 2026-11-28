@@ -5,6 +5,7 @@ import { useI18n } from '../i18n';
 import { fmtDate, fmtMoney, fineReason, getCalendar, setCalendar } from '../public/format';
 import MyLists from './MyLists';
 import MyWishlist from './MyWishlist';
+import MyChallenge from './MyChallenge';
 import { reason } from '../public/BorrowDialog';
 
 interface MyLoan { id: string; book_slug: string | null; title: string; title_ar: string | null; due_at: string; returned_at: string | null; renewals_left: number; overdue: boolean }
@@ -59,6 +60,7 @@ export default function MyLibrary() {
           ))}
         </ul>
       )}
+      <MyChallenge />
       <MyWishlist />
       <MyLists />
       <h2>{t('my.digital')}</h2>
