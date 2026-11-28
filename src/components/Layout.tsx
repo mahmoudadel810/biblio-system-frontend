@@ -31,7 +31,7 @@ export default function Layout() {
     '/app': isStaff ? 'staff.nav.dashboard' : 'reader.mylib', '/catalog': 'staff.nav.catalog', '/notifications': 'reader.notes',
     '/loans': 'staff.nav.loans', '/desk': 'staff.nav.desk', '/labels': 'staff.nav.labels', '/members': 'staff.nav.members', '/transfers': 'staff.nav.transfers',
     '/procurement': 'staff.nav.procurement', '/inventory': 'staff.nav.inventory', '/import': 'staff.nav.import',
-    '/payments': 'staff.nav.payments', '/reports': 'staff.nav.reports', '/settings': 'staff.nav.settings',
+    '/payments': 'staff.nav.payments', '/reports': 'staff.nav.reports', '/analytics': 'staff.nav.analytics', '/settings': 'staff.nav.settings',
     '/organizations': 'staff.nav.orgs', '/audit': 'staff.nav.audit', '/account': 'nav.account',
   };
   const pageH1 = <h1 className="sr-only">{titleKeys[pathname] ? t(titleKeys[pathname]) : 'Biblio'}</h1>;
@@ -86,6 +86,7 @@ export default function Layout() {
           {isStaff && <NavLink to="/import">{t('staff.nav.import')}</NavLink>}
           {isStaff && <NavLink to="/payments">{t('staff.nav.payments')}</NavLink>}
           {isStaff && <NavLink to="/reports">{t('staff.nav.reports')}</NavLink>}
+          {isStaff && <NavLink to="/analytics">{t('staff.nav.analytics')}</NavLink>}
           {isAdmin && <NavLink to="/settings">{t('staff.nav.settings')}</NavLink>}
           {isAdmin && <NavLink to="/organizations">{t('staff.nav.orgs')}</NavLink>}
           {isAdmin && <NavLink to="/audit">{t('staff.nav.audit')}</NavLink>}
