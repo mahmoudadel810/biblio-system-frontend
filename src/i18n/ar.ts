@@ -685,4 +685,9 @@ export const ar: Record<string, string> = {
   'recs.because': "مشابه لـ",
   'recs.available': "متاح",
   'recs.out': "مُعار",
+  'fp.title': "سياسة الغرامات لمكتبتك",
+  'fp.help': "اترك الخانة فارغة لاستخدام قيمة المنصة. المبالغ بالريال السعودي.",
+  'fp.library': "المكتبة",
+  'fp.platform': "المنصة:",
+  'fp.saved': "تم حفظ السياسة.",
 };

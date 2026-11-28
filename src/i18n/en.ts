@@ -685,4 +685,9 @@ export const en: Record<string, string> = {
   'recs.because': "Similar to",
   'recs.available': "Available",
   'recs.out': "On loan",
+  'fp.title': "Fines policy for your library",
+  'fp.help': "Leave a box empty to follow the platform value. Amounts are in SAR.",
+  'fp.library': "Library",
+  'fp.platform': "Platform:",
+  'fp.saved': "Policy saved.",
 };

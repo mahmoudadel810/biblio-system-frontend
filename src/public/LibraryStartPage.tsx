@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { api, ApiError } from '../api/client';
+import FinePolicy from '../pages/FinePolicy';
 import { useAuth } from '../auth/AuthContext';
 import { useI18n } from '../i18n';
 import { useTitle } from './hooks';
@@ -62,6 +63,7 @@ export default function LibraryStartPage() {
           </ul>
         </div>
       )}
+      {user && <FinePolicy />}
       {user && done && (
         <div role="status">
           <h2>{t('lib.done')}</h2>
