@@ -40,6 +40,7 @@ const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const OrgQueuePage = lazy(() => import('./pages/OrgQueuePage'));
 const TransfersPage = lazy(() => import('./pages/TransfersPage'));
+const InterlibraryPage = lazy(() => import('./pages/InterlibraryPage'));
 const GoogleCallbackPage = lazy(() => import('./pages/GoogleCallbackPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const AccountPage = lazy(() => import('./pages/AccountPage'));
@@ -50,7 +51,7 @@ const ROUTE_TITLES: Record<string, string> = {
   '/login': 'Sign in', '/forgot-password': 'Reset password', '/reset-password': 'New password', '/register': 'Create account', '/app': 'My library', '/account': 'Account', '/catalog': 'Catalog',
   '/notifications': 'Notifications', '/loans': 'Loans', '/members': 'Members', '/transfers': 'Transfers',
   '/procurement': 'Procurement', '/inventory': 'Inventory', '/payments': 'Payments', '/reports': 'Reports', '/analytics': 'Analytics',
-  '/import': 'Import', '/settings': 'Settings', '/near': 'Libraries near me', '/clubs': 'Book clubs', '/organizations': 'Organizations', '/audit': 'Audit log',
+  '/import': 'Import', '/settings': 'Settings', '/interlibrary': 'Inter-library requests', '/near': 'Libraries near me', '/clubs': 'Book clubs', '/organizations': 'Organizations', '/audit': 'Audit log',
 };
 function RouteTitle() {
   const { pathname } = useLocation();
@@ -188,6 +189,14 @@ export default function App() {
           element={
             <ProtectedRoute role="librarian">
               <ReportsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/interlibrary"
+          element={
+            <ProtectedRoute role="librarian">
+              <InterlibraryPage />
             </ProtectedRoute>
           }
         />
