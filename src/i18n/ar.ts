@@ -680,4 +680,9 @@ export const ar: Record<string, string> = {
   'org.nobranches': "لا توجد فروع مدرجة بعد.",
   'org.books': "من المجموعة",
   'role.assistant': "مساعد مكتب",
+  'recs.title': "مختارة لك",
+  'recs.popular': "الأكثر استعارة",
+  'recs.because': "مشابه لـ",
+  'recs.available': "متاح",
+  'recs.out': "مُعار",
 };

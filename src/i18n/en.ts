@@ -680,4 +680,9 @@ export const en: Record<string, string> = {
   'org.nobranches': "No branches listed yet.",
   'org.books': "From the collection",
   'role.assistant': "desk assistant",
+  'recs.title': "Picked for you",
+  'recs.popular': "Most borrowed",
+  'recs.because': "Similar to",
+  'recs.available': "Available",
+  'recs.out': "On loan",
 };
