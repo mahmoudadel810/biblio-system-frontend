@@ -1,6 +1,6 @@
 // API types mirroring the biblio-system-rust backend responses.
 
-export type Role = 'member' | 'librarian' | 'admin';
+export type Role = 'member' | 'assistant' | 'librarian' | 'admin';
 
 export interface Member {
   id: string;

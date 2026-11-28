@@ -106,7 +106,7 @@ export default function App() {
         <Route
           path="/loans"
           element={
-            <ProtectedRoute role="librarian">
+            <ProtectedRoute role="assistant">
               <LoansPage />
             </ProtectedRoute>
           }
@@ -122,7 +122,7 @@ export default function App() {
         <Route
           path="/desk"
           element={
-            <ProtectedRoute role="librarian">
+            <ProtectedRoute role="assistant">
               <DeskPage />
             </ProtectedRoute>
           }
@@ -130,7 +130,7 @@ export default function App() {
         <Route
           path="/members"
           element={
-            <ProtectedRoute role="librarian">
+            <ProtectedRoute role="assistant">
               <MembersPage />
             </ProtectedRoute>
           }

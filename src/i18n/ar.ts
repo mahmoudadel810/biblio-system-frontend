@@ -679,4 +679,5 @@ export const ar: Record<string, string> = {
   'org.branches': "الفروع",
   'org.nobranches': "لا توجد فروع مدرجة بعد.",
   'org.books': "من المجموعة",
+  'role.assistant': "مساعد مكتب",
 };
