@@ -11,6 +11,7 @@ import { reason } from '../public/BorrowDialog';
 interface MyLoan { id: string; book_slug: string | null; title: string; title_ar: string | null; due_at: string; returned_at: string | null; renewals_left: number; overdue: boolean }
 interface MyHold { id: string; book_slug: string | null; title: string; title_ar: string | null; status: string; expires_at: string; queue_position: number }
 interface DLoan { id: string; book_slug: string | null; book_title: string; book_title_ar?: string | null; days_left: number }
+interface Pick { slug: string; title: string; title_ar: string | null; authors: string | null; because_title: string | null; because_title_ar: string | null; available: number }
 interface Fine { id: string; amount: number; reason: string; status: string }
 
 // The member's own loans, holds and fines, with the reason shown when an action is blocked.
@@ -20,6 +21,7 @@ export default function MyLibrary() {
   const [holds, setHolds] = useState<MyHold[]>([]);
   const [dl, setDl] = useState<DLoan[]>([]);
   const [fines, setFines] = useState<Fine[]>([]);
+  const [recs, setRecs] = useState<{ basis: string; items: Pick[] } | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>({});
 
   const load = useCallback(() => {
@@ -27,6 +29,7 @@ export default function MyLibrary() {
     api.get<MyHold[]>('/me/holds').then(setHolds).catch(() => {});
     api.get<DLoan[]>('/me/digital-loans').then(setDl).catch(() => {});
     api.get<Fine[]>('/fines?status=unpaid').then(setFines).catch(() => {});
+    api.get<{ basis: string; items: Pick[] }>('/me/recommendations').then(setRecs).catch(() => {});
   }, []);
   useEffect(load, [load]);
 
@@ -100,6 +103,23 @@ export default function MyLibrary() {
         <>
           <p><strong><bdi>{fmtMoney(total, lang)}</bdi></strong> {t('my.finesNote')}</p>
           <ul className="mylist">{fines.map((f) => <li key={f.id}><span>{fineReason(f.reason, t)}</span><bdi>{fmtMoney(f.amount, lang)}</bdi></li>)}</ul>
+        </>
+      )}
+      {recs && recs.items.length > 0 && (
+        <>
+          <h2>{t(recs.basis === 'history' ? 'recs.title' : 'recs.popular')}</h2>
+          <ul className="mylist">
+            {recs.items.map((r) => (
+              <li key={r.slug}>
+                <div>
+                  <Link to={`/books/${r.slug}`}><bdi>{name(r)}</bdi></Link>
+                  {r.authors && <div className="muted small"><bdi>{r.authors}</bdi></div>}
+                  {r.because_title && <div className="muted small">{t('recs.because')} <bdi>{lang === 'ar' && r.because_title_ar ? r.because_title_ar : r.because_title}</bdi></div>}
+                </div>
+                <span className={r.available > 0 ? 'badge ok' : 'badge'}>{t(r.available > 0 ? 'recs.available' : 'recs.out')}</span>
+              </li>
+            ))}
+          </ul>
         </>
       )}
     </section>
