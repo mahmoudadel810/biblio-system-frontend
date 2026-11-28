@@ -11,6 +11,7 @@ import DirectoryPage from './public/DirectoryPage';
 import CreditsPage from './public/CreditsPage';
 const StoreListingsPage = lazy(() => import('./pages/StoreListingsPage'));
 const ReaderPage = lazy(() => import('./public/ReaderPage'));
+import NearbyPage from './public/NearbyPage';
 import ListPage from './public/ListPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -45,7 +46,7 @@ const ROUTE_TITLES: Record<string, string> = {
   '/login': 'Sign in', '/forgot-password': 'Reset password', '/reset-password': 'New password', '/register': 'Create account', '/app': 'My library', '/account': 'Account', '/catalog': 'Catalog',
   '/notifications': 'Notifications', '/loans': 'Loans', '/members': 'Members', '/transfers': 'Transfers',
   '/procurement': 'Procurement', '/inventory': 'Inventory', '/payments': 'Payments', '/reports': 'Reports',
-  '/import': 'Import', '/settings': 'Settings', '/organizations': 'Organizations', '/audit': 'Audit log',
+  '/import': 'Import', '/settings': 'Settings', '/near': 'Libraries near me', '/organizations': 'Organizations', '/audit': 'Audit log',
 };
 function RouteTitle() {
   const { pathname } = useLocation();
@@ -67,6 +68,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/books" element={<BooksPage />} />
         <Route path="/books/:slug" element={<BookPage />} />
+        <Route path="/near" element={<NearbyPage />} />
         <Route path="/lists/:id" element={<ListPage />} />
         <Route path="/read/:slug" element={<ReaderPage />} />
         <Route path="/store/:orgId/listings" element={<ProtectedRoute><StoreListingsPage /></ProtectedRoute>} />

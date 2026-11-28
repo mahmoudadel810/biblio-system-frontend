@@ -29,7 +29,7 @@ const tokens = {
 };
 const ROUTES = [
   ['public', '/'], ['public', '/books'], ['public', `/books/${SLUG}`], ['public', '/authors'],
-  ['public', '/libraries'], ['public', '/bookstores'], ['public', '/library/start'],
+  ['public', '/libraries'], ['public', '/near'], ['public', '/bookstores'], ['public', '/library/start'],
   ['member', '/app'], ['member', `/read/${SLUG}`], ['member', '/library/start'],
   ['admin', '/organizations'], ['admin', '/settings'],
 ];

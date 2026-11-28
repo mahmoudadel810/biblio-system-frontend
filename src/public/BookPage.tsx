@@ -89,6 +89,7 @@ export default function BookPage() {
             </tbody>
           </table>
         )}
+        {b.availability.length > 0 && <p><Link to={`/near?book=${encodeURIComponent(b.slug)}`}>{t('near.link')}</Link></p>}
         <WhereToBuy slug={b.slug} />
         <BookReviews slug={b.slug} />
         {b.quotes.length > 0 && (

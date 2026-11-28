@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { api, ApiError } from '../api/client';
 import { useI18n } from '../i18n';
 import type { LibrarySettings } from '../api/types';
+import BranchLocations from './BranchLocations';
 
 export default function SettingsPage() {
   const { t } = useI18n();
@@ -52,6 +53,7 @@ export default function SettingsPage() {
   );
 
   return (
+    <>
     <div className="panel">
       <h2>{t('set.title')}</h2>
       <form className="inline-form" onSubmit={save}>
@@ -71,5 +73,7 @@ export default function SettingsPage() {
       {message && <p>{message}</p>}
       {error && <p className="error-text">{error}</p>}
     </div>
+    <BranchLocations />
+    </>
   );
 }
