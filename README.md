@@ -1,51 +1,43 @@
-# Biblio System Frontend
+# Biblio
 
-React + TypeScript single-page app for the
-[biblio-system-rust](https://github.com/mahmoudadel810/biblio-system-rust)
-Library Management System API.
+A bilingual (English and Arabic, full RTL) library platform: browse books, authors and libraries without an account, and borrow from verified libraries once you join.
 
-## Stack
+**Live:** https://biblio-lms.pages.dev
 
-- **React 18** with **TypeScript**
-- **Vite** dev server and build
-- **React Router** for routing
-- Plain CSS, no UI framework
+## Screenshots
+
+| Home (desktop) | Home (mobile) | Home (Arabic) |
+| --- | --- | --- |
+| ![Home desktop](docs/screenshots/home-desktop.jpg) | ![Home mobile](docs/screenshots/home-mobile.jpg) | ![Home Arabic](docs/screenshots/home-arabic.jpg) |
+
+| Books | Book page |
+| --- | --- |
+| ![Books](docs/screenshots/books.jpg) | ![Book page](docs/screenshots/book.jpg) |
+
+| Authors | Libraries |
+| --- | --- |
+| ![Authors](docs/screenshots/authors.jpg) | ![Libraries](docs/screenshots/libraries.jpg) |
 
 ## Features
 
-- Email/password auth with automatic access-token refresh
-- Member view: personal dashboard (loans, reservations, fines, unread
-  notifications), catalog search with reservations, notifications
-- Staff view: loan desk (borrow / return / renew), member administration,
-  multi-branch transfers, procurement (suppliers and purchase orders),
-  inventory stock-takes and adjustments, fine payment collection with a
-  payment ledger, reports and statistics
-- Admin-only: library settings, audit log
+- English and Arabic with full right-to-left layout
+- Public browsing of books, authors, quotes and libraries, no login needed
+- Members borrow from any verified library
+- Reader for public-domain books
+- Responsive down to 390px, respects reduced motion
+
+## Stack
+
+React 18, TypeScript, Vite, React Router, plain CSS.
 
 ## Run locally
 
 ```bash
-cp .env.example .env   # point VITE_API_URL at the running API
+cp .env.example .env   # set VITE_API_URL to your API
 npm install
-npm run dev            # http://localhost:5173
+npm run dev
 ```
-
-Build for production:
 
 ```bash
-npm run build          # type-checks with tsc, then bundles into dist/
-npm run preview
-```
-
-## Layout
-
-```
-src/
-  main.tsx          entrypoint
-  App.tsx           routes with role guards
-  api/client.ts     fetch wrapper (bearer token + one-shot refresh)
-  api/types.ts      API response types
-  auth/             auth context and session handling
-  components/       layout and route guards
-  pages/            one page per feature area
+npm run build          # type-check and bundle into dist/
 ```
