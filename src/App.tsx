@@ -11,6 +11,7 @@ import DirectoryPage from './public/DirectoryPage';
 import CreditsPage from './public/CreditsPage';
 const StoreListingsPage = lazy(() => import('./pages/StoreListingsPage'));
 const ReaderPage = lazy(() => import('./public/ReaderPage'));
+import AnalyticsPage from './pages/AnalyticsPage';
 import ClubsPage from './public/ClubsPage';
 import ClubPage from './public/ClubPage';
 import NearbyPage from './public/NearbyPage';
@@ -47,7 +48,7 @@ const ImportPage = lazy(() => import('./pages/ImportPage'));
 const ROUTE_TITLES: Record<string, string> = {
   '/login': 'Sign in', '/forgot-password': 'Reset password', '/reset-password': 'New password', '/register': 'Create account', '/app': 'My library', '/account': 'Account', '/catalog': 'Catalog',
   '/notifications': 'Notifications', '/loans': 'Loans', '/members': 'Members', '/transfers': 'Transfers',
-  '/procurement': 'Procurement', '/inventory': 'Inventory', '/payments': 'Payments', '/reports': 'Reports',
+  '/procurement': 'Procurement', '/inventory': 'Inventory', '/payments': 'Payments', '/reports': 'Reports', '/analytics': 'Analytics',
   '/import': 'Import', '/settings': 'Settings', '/near': 'Libraries near me', '/clubs': 'Book clubs', '/organizations': 'Organizations', '/audit': 'Audit log',
 };
 function RouteTitle() {
@@ -168,6 +169,14 @@ export default function App() {
           element={
             <ProtectedRoute role="librarian">
               <PaymentsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute role="librarian">
+              <AnalyticsPage />
             </ProtectedRoute>
           }
         />

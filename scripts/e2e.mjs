@@ -31,7 +31,7 @@ const ROUTES = [
   ['public', '/'], ['public', '/books'], ['public', `/books/${SLUG}`], ['public', '/authors'],
   ['public', '/libraries'], ['public', '/near'], ['public', '/clubs'], ['public', '/bookstores'], ['public', '/library/start'],
   ['member', '/app'], ['member', `/read/${SLUG}`], ['member', '/library/start'],
-  ['admin', '/organizations'], ['admin', '/settings'],
+  ['admin', '/organizations'], ['admin', '/analytics'], ['admin', '/settings'],
 ];
 
 const port = 9800 + Math.floor(Math.random() * 100);
