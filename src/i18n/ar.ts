@@ -728,4 +728,6 @@ export const ar: Record<string, string> = {
   'dig.upload': "رفع ونشر",
   'dig.toobig': "الملف أكبر من 8 ميغابايت.",
   'dig.done': "تمت إضافة الإصدار. عدد الصفحات:",
+  'rep.csv': "تصدير CSV",
+  'rep.print': "طباعة التقرير",
 };

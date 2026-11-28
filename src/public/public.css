@@ -107,7 +107,7 @@ blockquote { margin: var(--s-4) 0; padding-inline-start: var(--s-4); border-inli
 .reader-hidden .reader-text, .reader-hidden .reader-mark { filter: blur(14px); }
 .reader-paused { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; text-align: center; font-weight: 700; padding: var(--s-6); }
 .reader-nav { margin-block: var(--s-4); }
-@media print { body:not(.printing-labels) * { display: none !important; } body:not(.printing-labels)::before { content: ''; } }
+@media print { body:not(.printing-labels):not(.printing-report) * { display: none !important; } body:not(.printing-labels)::before { content: ''; } }
 .field-inline { display: inline-flex; align-items: center; gap: var(--s-3); font-weight: 700; margin-block: var(--s-4); }
 .field-inline select { padding: var(--s-2) var(--s-4); border: 1px solid var(--line); border-radius: var(--r-inner); background: var(--card); font: inherit; color: inherit; }
 

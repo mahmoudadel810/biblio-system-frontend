@@ -728,4 +728,6 @@ export const en: Record<string, string> = {
   'dig.upload': "Upload and publish",
   'dig.toobig': "That file is larger than 8 MB.",
   'dig.done': "Edition added. Pages:",
+  'rep.csv': "Export CSV",
+  'rep.print': "Print report",
 };

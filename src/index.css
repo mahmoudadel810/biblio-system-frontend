@@ -343,3 +343,15 @@ form.inline-form {
 .an-table { margin-block: 16px; border-collapse: collapse; }
 .an-table th, .an-table td { padding: 4px 12px; text-align: start; }
 .an-m { white-space: nowrap; font-size: .65rem; }
+
+/* Reports: print and CSV. */
+.rep-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 8px; }
+.print-only { display: none; }
+@media print {
+  .print-only { display: block; font-size: 14pt; margin: 0 0 8mm; }
+  .rep-actions { display: none !important; }
+  body.printing-report .panel, body.printing-report .stat-card { box-shadow: none !important; border: 1px solid #999; break-inside: avoid; }
+  body.printing-report .stat-card .label { border: 0; padding: 0; display: block; }
+  body.printing-report table { font-size: 9pt; }
+  body.printing-report { background: #fff !important; color: #000 !important; }
+}
