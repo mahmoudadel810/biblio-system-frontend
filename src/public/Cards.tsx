@@ -80,6 +80,13 @@ export function BookTile({ book }: { book: BookCard }) {
   );
 }
 
+// Two letters for the placeholder circle. The full name is printed under the circle.
+const initials = (name: string) => {
+  const w = name.trim().split(/\s+/).filter(Boolean);
+  const pick = (x: string) => Array.from(x)[0] ?? '';
+  return (w.length > 1 ? pick(w[0]) + pick(w[w.length - 1]) : pick(w[0] ?? '')).toUpperCase();
+};
+
 export function AuthorTile({ a }: { a: AuthorCard }) {
   const { lang } = useI18n();
   const name = lang === 'ar' && a.name_ar ? a.name_ar : a.name;
@@ -89,7 +96,7 @@ export function AuthorTile({ a }: { a: AuthorCard }) {
       {a.photo_url ? (
         <img className="cover round" src={a.photo_url} alt="" loading="lazy" width={200} height={200} />
       ) : (
-        <div className="cover blank round" aria-hidden="true">{name}</div>
+        <div className="cover blank round initials" aria-hidden="true">{initials(name)}</div>
       )}
       <strong>{name}</strong>
       <bdi className="muted">{years}</bdi>
