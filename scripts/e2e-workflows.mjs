@@ -115,7 +115,11 @@ try {
   await visit(page, ['/desk', '/settings', '/payments'], { allowed: false });
 
   step('member: borrow a book from its page (UI)');
-  await page.goto(`${BASE}/books/${SLUG}?lang=en`);
+  // Earlier runs keep their loans, so borrow whichever book still has a copy on the shelf.
+  const shelf = await api('GET', '/public/books?per_page=48');
+  const toBorrow = shelf.data.items.find((b) => b.available_copies > 0)?.slug;
+  check(!!toBorrow, 'no book has a free copy');
+  await page.goto(`${BASE}/books/${toBorrow}?lang=en`);
   await page.getByRole('button', { name: 'Borrow' }).first().click();
   const confirm = page.getByRole('button', { name: 'Borrow this book' });
   if (await shown(confirm)) {
@@ -128,7 +132,7 @@ try {
 
   step('member: save another book to the wishlist (UI)');
   const books = await api('GET', '/public/books?per_page=5');
-  const other = books.data.items.find((b) => b.slug !== SLUG);
+  const other = books.data.items.find((b) => b.slug !== toBorrow);
   await page.goto(`${BASE}/books/${other.slug}?lang=en`);
   const wish = page.getByRole('button', { name: /Save to wishlist|Notify me when available/ }).first();
   if (await shown(wish)) {
